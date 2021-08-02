@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import gnu.trove.list.array.TIntArrayList;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
 import pgl.infra.table.RowTable;
 import pgl.infra.utils.Benchmark;
 import pgl.infra.utils.IOUtils;
@@ -36,7 +39,7 @@ public class Parsing {
 
     String[] subDirS = {"subFastqs", "sams", "geneCount", "countTable"};
 
-    public Parsing(String arg){
+    public Parsing(String[] arg){
         this.parseParameters(arg);
         this.processTaxaAndBarcode();
         this.PEParse();
@@ -123,12 +126,11 @@ public class Parsing {
         time.append("Distinguish samples according to barcode and trim the barcode.").append("Took ").append(Benchmark.getTimeSpanSeconds(startTimePoint)).append(" seconds. Memory used: ").append(Benchmark.getUsedMemoryGb()).append(" Gb");
         System.out.println(time.toString());
     }
-    private void parseParameters (String arg) {
-        String infor = arg.split("-p\t")[1];
-        this.inputFileDirS=infor.split("\t")[0];
-        this.outputFileDirS=infor.split("\t")[1];
-        this.sampleInformationFileS=infor.split("\t")[2];
-        this.library=infor.split("\t")[3];
+    private void parseParameters (String[] arg) {
+        this.inputFileDirS=arg[0];
+        this.outputFileDirS=arg[1];
+        this.sampleInformationFileS=arg[2];
+        this.library=arg[3];
         try{
             this.libraryInformationFileS=new File(this.outputFileDirS).getAbsolutePath()+"/SampleInformation_"+this.library+".txt";
             try{

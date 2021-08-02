@@ -15,9 +15,8 @@ public class Counting {
     String GTFDir = null;
     String subDirS[] = {"geneCount","countTable"};
 
-    public Counting(String arg) {
-        inputFileDirS = arg.split("-p\t")[1].split("\t")[0];
-        GTFDir = arg.split("-p\t")[1].split("\t")[1];
+    public Counting(String[] arg) {
+        inputFileDirS = arg[0];GTFDir = arg[1];
         this.HTSeqCount();
         this.countTable();
     }

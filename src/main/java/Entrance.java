@@ -25,7 +25,14 @@ public class Entrance implements CLIInterface {
     String introduction = this.createIntroduction();
     String app = null;
     String parameterPath = null;
+    String parameters = null;
 
+    String inputFileDirS = null;
+    String outputFileDirS=null;
+    String sampleInformationFileS = null;
+    String library = null;
+
+    String GTFDir = null;
 
     public Entrance (String[] args) {
         this.createOptions();
@@ -36,7 +43,8 @@ public class Entrance implements CLIInterface {
     public void createOptions() {
         options = new Options();
         options.addOption("a", true, "App. e.g. -a Parsing");
-        options.addOption("p", true, "Parameter file path of an app. e.g. parameter_Parsing.txt");
+        options.addOption("f", true, "Parameter file path of an app. e.g. parameter_Alignment.txt");
+        options.addOption("p", true, "Some parameters for an app. e.g. --inputFileDirS /User/bin/");
     }
 
     @Override
@@ -45,7 +53,23 @@ public class Entrance implements CLIInterface {
         try {
             CommandLine line = parser.parse(options, args);
             app = line.getOptionValue("a");
-            parameterPath = line.getOptionValue("p");
+            parameterPath = line.getOptionValue("f");
+            parameters = line.getOptionValue("p");
+            if( line.hasOption( "inputFileDirS" ) ) {
+                inputFileDirS=line.getOptionValue("intputFileDirS");
+            }
+            if( line.hasOption( "outputFileDirS" ) ) {
+                outputFileDirS=line.getOptionValue("outputFileDirS");
+            }
+            if( line.hasOption( "sampleInformationFileS" ) ) {
+                sampleInformationFileS=line.getOptionValue("samlpeInformationFileS");
+            }
+            if( line.hasOption( "library" ) ) {
+                library=line.getOptionValue("library");
+            }
+            if( line.hasOption( "GTFDir")){
+                GTFDir=line.getOptionValue("GTFDir");
+            }
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -57,7 +81,8 @@ public class Entrance implements CLIInterface {
             System.exit(0);
         }
         if (app.equals(AppNames.Parsing.getName())) {
-            new Parsing(this.parameterPath);
+            String[] news = {this.inputFileDirS, this.outputFileDirS, this.sampleInformationFileS, this.library};
+            new Parsing(news);
         }
         else if (app.equals(AppNames.QC.getName())) {
             new QC (this.parameterPath);
@@ -69,7 +94,8 @@ public class Entrance implements CLIInterface {
             new SampleValidation (this.parameterPath);
         }
         else if (app.equals(AppNames.Counting.getName())) {
-            new Counting (this.parameterPath);
+            String[] news = {this.inputFileDirS, this.GTFDir};
+            new Counting (news);
         }
         else {
             System.out.println("App does not exist");
