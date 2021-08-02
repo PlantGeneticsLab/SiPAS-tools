@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="TIGER_v1.0.3">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/src/lib/TIGER_v1.0.3.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
