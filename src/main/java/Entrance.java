@@ -7,7 +7,7 @@
 import java.io.File;
 
 import app.*;
-import app.align;
+import app.Alignment;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -39,7 +39,7 @@ public class Entrance implements CLIInterface {
     @Override
     public void createOptions() {
         options = new Options();
-        options.addOption("a", true, "App. e.g. -a parsing");
+        options.addOption("a", true, "App. e.g. -a Parsing");
         options.addOption("f", true, "Parameter file path of an app. e.g. parameter_Alignment.txt");
         options.addOption("inputFile", true, "-inputFile /User/bin/");
         options.addOption("outputFileDirS", true, "-outputFileDirS /User/bin/");
@@ -82,20 +82,20 @@ public class Entrance implements CLIInterface {
         }
         if (app.equals(AppNames.Parsing.getName())) {
             String[] news = {this.inputFile, this.outputFileDirS, this.sampleInformationFileS, this.library};
-            new parsing(news);
+            new Parsing(news);
         }
         else if (app.equals(AppNames.QC.getName())) {
-            new qc(this.parameterPath);
+            new QC(this.parameterPath);
         }
         else if (app.equals(AppNames.Alignment.getName())) {
-            new align(this.parameterPath);
+            new Alignment(this.parameterPath);
         }
         else if (app.equals(AppNames.SampleValidation.getName())) {
-            new sampleValidation(this.parameterPath);
+            new SampleValidation(this.parameterPath);
         }
         else if (app.equals(AppNames.Counting.getName())) {
             String[] news = {this.inputFile, this.GTFDir};
-            new counting(news);
+            new Counting(news);
         }
         else {
             System.out.println("App does not exist");
@@ -127,7 +127,7 @@ public class Entrance implements CLIInterface {
         sb.append("\nBioinformatic toolkits of RNA-seq data is designed to simplify its usage.\n");
         sb.append("It uses two options to run its apps. \"-a\" is used to select an app. \"-f\" is used to provide a parameter file of an app.\n");
         sb.append("e.g. The command line usage of the app SiPAS-tools is: ");
-        sb.append("java -Xmx100g -jar SiPAS-tools.jar -a parsing -f parameter_parsing.txt > log.txt &\n");
+        sb.append("java -Xmx100g -jar SiPAS-tools.jar -a Parsing -f parameter_parsing.txt > log.txt &\n");
         sb.append("\nAvailable apps in SiPAS-tools include,\n");
         for (int i = 0; i < AppNames.values().length; i++) {
             sb.append(AppNames.values()[i].getName()).append("\n");

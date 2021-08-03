@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-public class align {
+public class Alignment {
     String starLib =null;
     String inputFileDirS = null;
     String mode = null;
@@ -23,7 +23,7 @@ public class align {
     String STARPath = null;
     String subDirS = "sams";
 
-    public align(String parameterPath) {
+    public Alignment(String parameterPath) {
         this.parseParameters(parameterPath);
         this.starAlignmentPEAndSortIndex();
     }
@@ -34,7 +34,7 @@ public class align {
         }
         String subFqDirS = new File(this.inputFileDirS +"/subFastqs/").getAbsolutePath();
         File[] fs = new File(subFqDirS).listFiles();
-        List<File> fList = new ArrayList(Arrays.asList());
+        ArrayList fList = new ArrayList(Arrays.asList());
         fs = IOUtils.listFilesEndsWith(fs, ".fq.gz");
         HashSet<String> nameSet = new HashSet();
         for (int i = 0; i < fs.length; i++) {
@@ -49,7 +49,7 @@ public class align {
         }
         for (int k=0;k<nameList.size();k++){
                 StringBuilder sb = new StringBuilder();
-                sb.append("zcat ").append(subFqDirS).append(nameList.get(k)+"R1.fq.gz");
+                sb.append("zcat ").append(subFqDirS).append(nameList.get(k)).append("R1.fq.gz");
                 sb.append(" | wc -l >> ").append(subFqDirS).append("LN.txt");
                 String command = sb.toString();
                 System.out.println(command);
@@ -67,7 +67,7 @@ public class align {
                 BufferedReader br = IOUtils.getTextReader(new File(subFqDirS)+"/"+"LN.txt");
                 String temp = null; int k =0;
                 while ((temp = br.readLine()) != null) {
-                    if (Integer.valueOf(temp)/4 < this.miniReads){
+                    if (Integer.parseInt(temp)/4 < this.miniReads){
                         nameSet.remove(nameList.get(k));
                     }
                     k++;
@@ -98,17 +98,17 @@ public class align {
 
                 String infile3 = new File(new File(this.inputFileDirS, subDirS).getAbsolutePath(), f).getAbsolutePath();
                 StringBuilder sb1= new StringBuilder();
-                sb1.append("samtools sort -o "+ infile3+"Aligned.out.sorted.bam "+infile3+"Aligned.out.bam -@ "+ this.threads);
+                sb1.append("samtools sort -o ").append(infile3).append("Aligned.out.sorted.bam ").append(infile3).append("Aligned.out.bam -@ ").append(this.threads);
                 String command1 = sb1.toString();
                 System.out.println(command1);
 
                 StringBuilder sb2= new StringBuilder();
-                sb2.append("rm "+ infile3+"Aligned.out.bam");
+                sb2.append("rm ").append(infile3).append("Aligned.out.bam");
                 String command2 = sb2.toString();
                 System.out.println(command2);
 
                 StringBuilder sb3= new StringBuilder();
-                sb3.append("samtools index "+infile3+"Aligned.out.sorted.bam -@ "+this.threads);
+                sb3.append("samtools index ").append(infile3).append("Aligned.out.sorted.bam -@ ").append(this.threads);
                 String command3=sb3.toString();
                 System.out.println(command3);
 
@@ -124,8 +124,6 @@ public class align {
                 }
                 System.out.println("Finished "+f);
             });
-            StringBuilder time = new StringBuilder();
-            System.out.println(time.toString());
     }
     public void parseParameters(String parameterFileS) {
         List<String> pLineList = new ArrayList<>();

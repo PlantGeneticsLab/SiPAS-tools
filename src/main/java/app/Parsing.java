@@ -13,7 +13,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.util.*;
 
-public class parsing {
+public class Parsing {
     String inputFile = null;
     String outputFileDirS=null;
     String sampleInformationFileS = null;
@@ -35,7 +35,7 @@ public class parsing {
 
     String[] subDirS = {"subFastqs", "sams", "geneCount", "countTable"};
 
-    public parsing(String[] arg){
+    public Parsing(String[] arg){
         long startTimePoint = System.nanoTime();
         this.parseParameters(arg);
         this.processTaxaAndBarcode();
@@ -116,9 +116,6 @@ public class parsing {
             e.printStackTrace();
             System.exit(1);
         }
-//        StringBuilder time = new StringBuilder();
-//        time.append("Distinguish samples according to barcode and trim the barcode.").append("Took ").append(Benchmark.getTimeSpanSeconds(startTimePoint)).append(" seconds. Memory used: ").append(Benchmark.getUsedMemoryGb()).append(" Gb");
-//        System.out.println(time.toString());
     }
     private void parseParameters (String[] arg) {
         this.inputFile =arg[0];
