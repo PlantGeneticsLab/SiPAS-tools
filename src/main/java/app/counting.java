@@ -9,13 +9,13 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.util.*;
 
-public class Counting {
+public class counting {
 
     String inputFileDirS = null;
     String GTFDir = null;
     String subDirS[] = {"geneCount","countTable"};
 
-    public Counting(String[] arg) {
+    public counting(String[] arg) {
         inputFileDirS = arg[0];GTFDir = arg[1];
         this.HTSeqCount();
         this.countTable();

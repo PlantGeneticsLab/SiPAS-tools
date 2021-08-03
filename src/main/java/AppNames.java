@@ -9,29 +9,29 @@
  */
 public enum AppNames implements Comparable <AppNames> {
     /**
-     * Parsing samples according barcodes.
+     * parsing samples according barcodes.
      */
-    Parsing ("Parsing"),
+    Parsing ("parsing"),
 
     /**
      * Quality control.
      */
-    QC ("QC"),
+    QC ("qc"),
 
     /**
-     * Alignment of fq file
+     * align of fq file
      */
-    Alignment ("Alignment"),
+    Alignment ("align"),
 
     /**
      * The validation of samples with DNA and RNA-seq data.
      */
-    SampleValidation ("SampleValidation"),
+    SampleValidation ("sampleValidation"),
 
     /**
      * Quantification of gene expression and get coutTable.
      */
-    Counting ("Counting");
+    Counting ("counting");
 
     public final String name;
 

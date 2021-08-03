@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-public class Alignment {
+public class align {
     String starLib =null;
     String inputFileDirS = null;
     String mode = null;
@@ -23,7 +23,7 @@ public class Alignment {
     String STARPath = null;
     String subDirS = "sams";
 
-    public Alignment(String parameterPath) {
+    public align(String parameterPath) {
         this.parseParameters(parameterPath);
         this.starAlignmentPEAndSortIndex();
     }

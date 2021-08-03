@@ -1,0 +1,15 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="SiPAS-tools:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/SiPAS_tools_jar</output-path>
+    <root id="archive" name="SiPAS-tools.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/src/main/java/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="SiPAS-tools" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/commons-cli/commons-cli/1.4/commons-cli-1.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/net/sf/trove4j/trove4j/3.0.3/trove4j-3.0.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/gnu-regexp/gnu-regexp/1.1.4/gnu-regexp-1.1.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/lib/TIGER_v1.0.3.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

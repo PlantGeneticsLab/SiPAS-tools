@@ -17,7 +17,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.util.*;
 
-public class Parsing {
+public class parsing {
     String inputFileDirS = null;
     String outputFileDirS=null;
     String sampleInformationFileS = null;
@@ -39,7 +39,7 @@ public class Parsing {
 
     String[] subDirS = {"subFastqs", "sams", "geneCount", "countTable"};
 
-    public Parsing(String[] arg){
+    public parsing(String[] arg){
         this.parseParameters(arg);
         this.processTaxaAndBarcode();
         this.PEParse();
@@ -173,7 +173,7 @@ public class Parsing {
             barcodeTaxaMaps.put(t.getCell(i, 8), taxon);
             barcodeLengths.add(t.getCell(i, 8).length());
         }
-        new File(this.outputFileDirS,"/"+this.inputFileDirS.split("/")[this.inputFileDirS.split("/").length-1].replace("_R1.fq.gz","").replace("_R2.fq.gz",""));
+        new File(this.outputFileDirS,"/"+this.inputFileDirS.split("/")[this.inputFileDirS.split("/").length-1].replace("_R1.fq.gz","").replace("_R2.fq.gz","")).mkdir();
         outputDirs=new File(this.outputFileDirS,"/"+this.inputFileDirS.split("/")[this.inputFileDirS.split("/").length-1].replace("_R1.fq.gz","").replace("_R2.fq.gz","")).toString();
         for (int i =0;i< subDirS.length;i++){
             new File(outputDirs, subDirS[i]).mkdir();

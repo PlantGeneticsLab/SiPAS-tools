@@ -6,11 +6,8 @@
 
 import java.io.File;
 
-import app.Alignment;
-import app.Parsing;
-import app.QC;
-import app.SampleValidation;
-import app.Counting;
+import app.*;
+import app.align;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -42,9 +39,12 @@ public class Entrance implements CLIInterface {
     @Override
     public void createOptions() {
         options = new Options();
-        options.addOption("a", true, "App. e.g. -a Parsing");
+        options.addOption("a", true, "App. e.g. -a parsing");
         options.addOption("f", true, "Parameter file path of an app. e.g. parameter_Alignment.txt");
-        options.addOption("p", true, "Some parameters for an app. e.g. --inputFileDirS /User/bin/");
+        options.addOption("inputFileDirS", true, "-inputFileDirS /User/bin/");
+        options.addOption("outputFileDirS", true, "-outputFileDirS /User/bin/");
+        options.addOption("sampleInformationFileS", true, "-sampleInformationFileS /User/bin/");
+        options.addOption("library", true, "-library /User/bin/");
     }
 
     @Override
@@ -54,15 +54,15 @@ public class Entrance implements CLIInterface {
             CommandLine line = parser.parse(options, args);
             app = line.getOptionValue("a");
             parameterPath = line.getOptionValue("f");
-            parameters = line.getOptionValue("p");
+
             if( line.hasOption( "inputFileDirS" ) ) {
-                inputFileDirS=line.getOptionValue("intputFileDirS");
+                inputFileDirS=line.getOptionValue("inputFileDirS");
             }
             if( line.hasOption( "outputFileDirS" ) ) {
                 outputFileDirS=line.getOptionValue("outputFileDirS");
             }
             if( line.hasOption( "sampleInformationFileS" ) ) {
-                sampleInformationFileS=line.getOptionValue("samlpeInformationFileS");
+                sampleInformationFileS=line.getOptionValue("sampleInformationFileS");
             }
             if( line.hasOption( "library" ) ) {
                 library=line.getOptionValue("library");
@@ -82,20 +82,20 @@ public class Entrance implements CLIInterface {
         }
         if (app.equals(AppNames.Parsing.getName())) {
             String[] news = {this.inputFileDirS, this.outputFileDirS, this.sampleInformationFileS, this.library};
-            new Parsing(news);
+            new parsing(news);
         }
         else if (app.equals(AppNames.QC.getName())) {
-            new QC (this.parameterPath);
+            new qc(this.parameterPath);
         }
         else if (app.equals(AppNames.Alignment.getName())) {
-            new Alignment(this.parameterPath);
+            new align(this.parameterPath);
         }
         else if (app.equals(AppNames.SampleValidation.getName())) {
-            new SampleValidation (this.parameterPath);
+            new sampleValidation(this.parameterPath);
         }
         else if (app.equals(AppNames.Counting.getName())) {
             String[] news = {this.inputFileDirS, this.GTFDir};
-            new Counting (news);
+            new counting(news);
         }
         else {
             System.out.println("App does not exist");
@@ -125,9 +125,9 @@ public class Entrance implements CLIInterface {
     public String createIntroduction() {
         StringBuilder sb = new StringBuilder();
         sb.append("\nBioinformatic toolkits of RNA-seq data is designed to simplify its usage.\n");
-        sb.append("It uses two options to run its apps. \"-a\" is used to select an app. \"-p\" is used to set parameters of an app.\n");
+        sb.append("It uses two options to run its apps. \"-a\" is used to select an app. \"-f\" is used to provide a parameter file of an app. \"-p\" is used to provide some parameters of an app \n");
         sb.append("e.g. The command line usage of the app SiPAS-tools is: ");
-        sb.append("java -Xmx100g -jar SiPAS-tools.jar -p Parsing -p parameter_parsing.txt > log.txt &\n");
+        sb.append("java -Xmx100g -jar SiPAS-tools.jar -a parsing -f parameter_parsing.txt > log.txt &\n");
         sb.append("\nAvailable apps in SiPAS-tools include,\n");
         for (int i = 0; i < AppNames.values().length; i++) {
             sb.append(AppNames.values()[i].getName()).append("\n");
