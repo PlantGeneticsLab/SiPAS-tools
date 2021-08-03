@@ -103,13 +103,13 @@ public class Entrance implements CLIInterface {
             System.exit(0);
         }
         if (this.parameterPath == null) {
-            System.out.println("Parametar file does not exist");
+            System.out.println("Parameter file does not exist");
             this.printIntroductionAndUsage();
             System.exit(0);
         }
         File f = new File (this.parameterPath);
         if (!f.exists()) {
-            System.out.println("Parametar file does not exist");
+            System.out.println("Parameter file does not exist");
             this.printIntroductionAndUsage();
             System.exit(0);
         }
