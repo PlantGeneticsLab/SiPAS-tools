@@ -4,21 +4,17 @@ import java.io.BufferedWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import gnu.trove.list.array.TIntArrayList;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
+
 import pgl.infra.table.RowTable;
 import pgl.infra.utils.Benchmark;
 import pgl.infra.utils.IOUtils;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.util.*;
 
 public class parsing {
-    String inputFileDirS = null;
+    String inputFile = null;
     String outputFileDirS=null;
     String sampleInformationFileS = null;
     String libraryInformationFileS = null;
@@ -40,18 +36,20 @@ public class parsing {
     String[] subDirS = {"subFastqs", "sams", "geneCount", "countTable"};
 
     public parsing(String[] arg){
+        long startTimePoint = System.nanoTime();
         this.parseParameters(arg);
         this.processTaxaAndBarcode();
         this.PEParse();
+        long endTimePoint = System.nanoTime();
+        System.out.println("Times:"+(endTimePoint-startTimePoint));
     }
 
     private void PEParse () {
-        long startTimePoint = System.nanoTime();
         String subFqDirS = new File(this.outputDirs,subDirS[0]).getAbsolutePath();
         String[] subFqFileS1 = new String[barcodeLists.size()];
         String[] subFqFileS2 = new String[barcodeLists.size()];
         HashMap<String, String> btMap = new HashMap();btMap=barcodeTaxaMaps;
-        Set<String> barcodeSet = new HashSet();
+        Set<String> barcodeSet = new HashSet(barcodeLists);
         BufferedWriter[] bws1 = new BufferedWriter[barcodeLists.size()];
         BufferedWriter[] bws2 = new BufferedWriter[barcodeLists.size()];
         HashMap barcodeWriterMap1 = new HashMap();
@@ -68,13 +66,13 @@ public class parsing {
         try {
             BufferedReader br1 = null;
             BufferedReader br2 = null;
-            String f2= fqR1R2Map.get(this.inputFileDirS);
-            if (this.inputFileDirS.endsWith(".gz")) {
-                br1 = IOUtils.getTextGzipReader(this.inputFileDirS);
+            String f2= fqR1R2Map.get(this.inputFile);
+            if (this.inputFile.endsWith(".gz")) {
+                br1 = IOUtils.getTextGzipReader(this.inputFile);
                 br2 = IOUtils.getTextGzipReader(f2);
             }
             else {
-                br1 = IOUtils.getTextReader(this.inputFileDirS);
+                br1 = IOUtils.getTextReader(this.inputFile);
                 br2 = IOUtils.getTextGzipReader(f2);
             }
             String temp = null;String seq = null;
@@ -89,8 +87,6 @@ public class parsing {
                 //barcode can be redesigned to have 4-8 bp in length for even efficiency between barcdes
                 //*************************
                 currentBarcode = seq.substring(0, 8);
-                int cutIndex = 0;
-                Boolean b = false;
                 if (barcodeSet.contains(currentBarcode)) {
                     tw1 = (BufferedWriter) barcodeWriterMap1.get(currentBarcode);
                     tw1.write(temp);tw1.newLine();
@@ -102,9 +98,7 @@ public class parsing {
                     tw2.write(br2.readLine());tw2.newLine();
                     tw2.write(br2.readLine());tw2.newLine();
                     tw2.write(br2.readLine());tw2.newLine();
-                    b=true;break;
-                }
-                if (!b){
+                } else{
                     br2.readLine();br2.readLine();br2.readLine();br2.readLine();
                     br1.readLine();br1.readLine();
                 }
@@ -122,12 +116,12 @@ public class parsing {
             e.printStackTrace();
             System.exit(1);
         }
-        StringBuilder time = new StringBuilder();
-        time.append("Distinguish samples according to barcode and trim the barcode.").append("Took ").append(Benchmark.getTimeSpanSeconds(startTimePoint)).append(" seconds. Memory used: ").append(Benchmark.getUsedMemoryGb()).append(" Gb");
-        System.out.println(time.toString());
+//        StringBuilder time = new StringBuilder();
+//        time.append("Distinguish samples according to barcode and trim the barcode.").append("Took ").append(Benchmark.getTimeSpanSeconds(startTimePoint)).append(" seconds. Memory used: ").append(Benchmark.getUsedMemoryGb()).append(" Gb");
+//        System.out.println(time.toString());
     }
     private void parseParameters (String[] arg) {
-        this.inputFileDirS=arg[0];
+        this.inputFile =arg[0];
         this.outputFileDirS=arg[1];
         this.sampleInformationFileS=arg[2];
         this.library=arg[3];
@@ -136,7 +130,7 @@ public class parsing {
             try{
                 BufferedReader br = IOUtils.getTextReader(this.sampleInformationFileS);
                 BufferedWriter bw = IOUtils.getTextWriter(this.libraryInformationFileS);
-                String temp = null;bw.write("Library ID\tSample ID\tTaxa ID\tLand ID\tStage\tTissue\tPeople\tCovariates\tBarcode\n");
+                String temp = null;bw.write("Library ID\tSample ID\tTaxa ID\tLand ID\tStage\tTissue\tBarcode\n");
                 while ((temp = br.readLine()) != null) {
                     if (temp.startsWith(this.library+"\t")){
                         bw.write(temp+"\n");
@@ -156,12 +150,12 @@ public class parsing {
     private void processTaxaAndBarcode () {
         RowTable<String> t = new RowTable<>(this.libraryInformationFileS);
         String R2=null;
-        if (this.inputFileDirS.contains("R1.fq.gz")){
-            R2= inputFileDirS.replace("R1.fq.gz","R2.fq.gz");
+        if (this.inputFile.contains("R1.fq.gz")){
+            R2= inputFile.replace("R1.fq.gz","R2.fq.gz");
         }else{
-            R2= inputFileDirS.replace("R2.fq.gz","R1.fq.gz");
+            R2= inputFile.replace("R2.fq.gz","R1.fq.gz");
         }
-        fqR1R2Map.putIfAbsent(inputFileDirS, R2);
+        fqR1R2Map.putIfAbsent(inputFile, R2);
         barcodeLengths = new ArrayList<Integer>();
         barcodeLists = new ArrayList();
         taxaLists = new ArrayList();
@@ -169,12 +163,12 @@ public class parsing {
         for (int i = 0; i < t.getRowNumber(); i++) {
             String taxon = t.getCell(i, 4)+t.getCell(i, 5)+"_"+this.library+"_"+t.getCell(i, 3);//输出的文件的名字
             taxaLists.add(taxon);
-            barcodeLists.add(t.getCell(i, 8));
-            barcodeTaxaMaps.put(t.getCell(i, 8), taxon);
-            barcodeLengths.add(t.getCell(i, 8).length());
+            barcodeLists.add(t.getCell(i, 6));
+            barcodeTaxaMaps.put(t.getCell(i, 6), taxon);
+            barcodeLengths.add(t.getCell(i, 6).length());
         }
-        new File(this.outputFileDirS,"/"+this.inputFileDirS.split("/")[this.inputFileDirS.split("/").length-1].replace("_R1.fq.gz","").replace("_R2.fq.gz","")).mkdir();
-        outputDirs=new File(this.outputFileDirS,"/"+this.inputFileDirS.split("/")[this.inputFileDirS.split("/").length-1].replace("_R1.fq.gz","").replace("_R2.fq.gz","")).toString();
+        new File(this.outputFileDirS,"/"+this.inputFile.split("/")[this.inputFile.split("/").length-1].replace("_R1.fq.gz","").replace("_R2.fq.gz","")).mkdir();
+        outputDirs=new File(this.outputFileDirS,"/"+this.inputFile.split("/")[this.inputFile.split("/").length-1].replace("_R1.fq.gz","").replace("_R2.fq.gz","")).toString();
         for (int i =0;i< subDirS.length;i++){
             new File(outputDirs, subDirS[i]).mkdir();
         }

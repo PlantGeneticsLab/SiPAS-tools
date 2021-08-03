@@ -24,7 +24,7 @@ public class Entrance implements CLIInterface {
     String parameterPath = null;
     String parameters = null;
 
-    String inputFileDirS = null;
+    String inputFile = null;
     String outputFileDirS=null;
     String sampleInformationFileS = null;
     String library = null;
@@ -41,7 +41,7 @@ public class Entrance implements CLIInterface {
         options = new Options();
         options.addOption("a", true, "App. e.g. -a parsing");
         options.addOption("f", true, "Parameter file path of an app. e.g. parameter_Alignment.txt");
-        options.addOption("inputFileDirS", true, "-inputFileDirS /User/bin/");
+        options.addOption("inputFile", true, "-inputFile /User/bin/");
         options.addOption("outputFileDirS", true, "-outputFileDirS /User/bin/");
         options.addOption("sampleInformationFileS", true, "-sampleInformationFileS /User/bin/");
         options.addOption("library", true, "-library /User/bin/");
@@ -55,8 +55,8 @@ public class Entrance implements CLIInterface {
             app = line.getOptionValue("a");
             parameterPath = line.getOptionValue("f");
 
-            if( line.hasOption( "inputFileDirS" ) ) {
-                inputFileDirS=line.getOptionValue("inputFileDirS");
+            if( line.hasOption( "inputFile" ) ) {
+                inputFile =line.getOptionValue("inputFile");
             }
             if( line.hasOption( "outputFileDirS" ) ) {
                 outputFileDirS=line.getOptionValue("outputFileDirS");
@@ -81,7 +81,7 @@ public class Entrance implements CLIInterface {
             System.exit(0);
         }
         if (app.equals(AppNames.Parsing.getName())) {
-            String[] news = {this.inputFileDirS, this.outputFileDirS, this.sampleInformationFileS, this.library};
+            String[] news = {this.inputFile, this.outputFileDirS, this.sampleInformationFileS, this.library};
             new parsing(news);
         }
         else if (app.equals(AppNames.QC.getName())) {
@@ -94,7 +94,7 @@ public class Entrance implements CLIInterface {
             new sampleValidation(this.parameterPath);
         }
         else if (app.equals(AppNames.Counting.getName())) {
-            String[] news = {this.inputFileDirS, this.GTFDir};
+            String[] news = {this.inputFile, this.GTFDir};
             new counting(news);
         }
         else {
@@ -125,7 +125,7 @@ public class Entrance implements CLIInterface {
     public String createIntroduction() {
         StringBuilder sb = new StringBuilder();
         sb.append("\nBioinformatic toolkits of RNA-seq data is designed to simplify its usage.\n");
-        sb.append("It uses two options to run its apps. \"-a\" is used to select an app. \"-f\" is used to provide a parameter file of an app. \"-p\" is used to provide some parameters of an app \n");
+        sb.append("It uses two options to run its apps. \"-a\" is used to select an app. \"-f\" is used to provide a parameter file of an app.\n");
         sb.append("e.g. The command line usage of the app SiPAS-tools is: ");
         sb.append("java -Xmx100g -jar SiPAS-tools.jar -a parsing -f parameter_parsing.txt > log.txt &\n");
         sb.append("\nAvailable apps in SiPAS-tools include,\n");
