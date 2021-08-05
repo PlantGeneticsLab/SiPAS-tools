@@ -1,10 +1,16 @@
 package utils;
 
+import pgl.infra.dna.genot.GenoIOFormat;
+import pgl.infra.dna.genot.GenotypeGrid;
+import pgl.infra.dna.genot.GenotypeOperation;
+import pgl.infra.dna.genot.summa.SumTaxaDivergence;
+import pgl.infra.utils.IOFileFormat;
 import pgl.infra.utils.IOUtils;
 import pgl.infra.utils.PStringUtils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -92,5 +98,40 @@ public class VCFutils {
             e.printStackTrace();
         }
     }
+
+    public void getHeterozygosity(String VCF,String output){
+        String input = new File(VCF).getAbsolutePath();
+        GenotypeGrid g = new GenotypeGrid(input,GenoIOFormat.VCF);
+        BufferedWriter bw = IOUtils.getTextWriter(output);
+        String[] names = g.getTaxaNames();
+        int homosite = 0;
+        int hetersite = 0;
+        double heterozygosity = 0;
+        try {
+            for (int i = 0; i < names.length; i++) {
+                hetersite = g.getHeterozygoteNumberByTaxon(i);
+                homosite = g.getHomozygoteNumberByTaxon(i);
+                heterozygosity = (double) hetersite / (hetersite + homosite);
+                bw.write(names[i] + "\t" + heterozygosity + "\n");
+            }
+            bw.flush();
+            bw.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public void getIBS(String VCF1,String VCF2,String outputfile){
+        String vcf1 = new File(VCF1).getAbsolutePath();
+        String vcf2 = new File(VCF2).getAbsolutePath();
+        String out = new File(outputfile).getAbsolutePath();
+        GenotypeGrid g1 = new GenotypeGrid(vcf1, GenoIOFormat.VCF);
+        GenotypeGrid g2 = new GenotypeGrid(vcf2, GenoIOFormat.VCF);
+        GenotypeGrid g = GenotypeOperation.mergeGenotypesByTaxon(g1, g2);
+        SumTaxaDivergence std = new SumTaxaDivergence(g);
+        std.writeDxyMatrix(out, IOFileFormat.Text);
+    }
+
 
 }
