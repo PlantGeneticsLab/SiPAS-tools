@@ -98,14 +98,18 @@ public class QC {
         BufferedWriter bw2 = IOUtils.getTextWriter(new File(outputdir, "Quality_R2.txt").getAbsolutePath());
         try {
             DecimalFormat defor = new DecimalFormat("0.000");
+            double value1 = 0;
+            double value2 = 0;
             for (int i = 0; i < names.length; i++) {
                 if(method.equals("mean")) {
-                    double value1 = MathUtils.getmean(Q_R1[i]);
-                    double value2 = MathUtils.getmean(Q_R1[i]);
+                    value1 = MathUtils.getmean(Q_R1[i]);
+                    value2 = MathUtils.getmean(Q_R1[i]);
                 }else if (method.equals("median")) {
-                    bw1.write(names[i] + "\t" + Q_R1[i] + "\n");
-                    bw2.write(names[i] + "\t" + Q_R2[i] + "\n");
+                    value1 = MathUtils.getmedian(Q_R1[i]);
+                    value2 = MathUtils.getmedian(Q_R1[i]);
                 }
+                bw1.write(names[i] + "\t" + defor.format(value1) + "\n");
+                bw2.write(names[i] + "\t" + defor.format(value1) + "\n");
             }
         } catch (Exception e) {
             e.printStackTrace();
