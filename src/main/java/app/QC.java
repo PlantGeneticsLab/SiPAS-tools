@@ -108,6 +108,4 @@ public class QC {
             e.printStackTrace();
         }
     }
-
-
 }
