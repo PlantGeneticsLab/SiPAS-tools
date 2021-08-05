@@ -6,6 +6,7 @@ import pgl.infra.utils.PStringUtils;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,12 +18,13 @@ import java.util.List;
  */
 public class VCFutils {
 
+
     String inputfile = null;
     String outputfile = null;
     String temp = null;
     List<String> temps = null;
-    List<String> tems = null;
-    List<String> samplelist = null;
+    String[] tems = null;
+
     HashMap<String, Integer> geneIndexMap = new HashMap<>();
     int[] homosite;
     int[] hetersite;
@@ -31,10 +33,16 @@ public class VCFutils {
     public VCFutils() {
     }
 
-    public void getHeter(String[] args) {
-        this.inputfile = args[0];
-        this.outputfile = args[1];
-        BufferedReader br = IOUtils.getTextGzipReader(inputfile);
+    public void getHeter(String input, String output) {
+        this.inputfile = input;
+        this.outputfile = output;
+        List<String> samplelist = new ArrayList<>();
+        BufferedReader br ;
+        if(input.endsWith("gz")){
+            br = IOUtils.getTextGzipReader(inputfile);
+        }else {
+            br = IOUtils.getTextReader(inputfile);
+        }
         BufferedWriter bw = IOUtils.getTextWriter(outputfile);
         try {
             while ((temp = br.readLine()) != null) {
@@ -53,11 +61,12 @@ public class VCFutils {
                 }
                 temps = PStringUtils.fastSplit(temp);
                 for (int i = 9; i < temps.size(); i++) {
-                    tems = PStringUtils.fastSplit(temps.get(i));
-                    if (!tems.get(0).equals("./.")) continue;
-                    if ((Integer.parseInt(tems.get(1).split(",")[0]) + Integer.parseInt(tems.get(1).split(",")[1])) < 2)
+                    tems = temps.get(i).split(":");
+                    if (tems[0].equals("./.")) continue;
+                    if ((Integer.parseInt(tems[1].split(",")[0]) + Integer.parseInt(tems[1].split(",")[1])) < 2)
                         continue;
-                    switch (tems.get(0)) {
+//                    System.out.println(tems[0]);
+                    switch (tems[0]) {
                         case "1/1":
                             homosite[i - 9] += 1;
                             break;
@@ -73,7 +82,9 @@ public class VCFutils {
             br.close();
             DecimalFormat decfor = new DecimalFormat("0.0000");
             for (int i = 0; i < samplelist.size(); i++) {
+//                System.out.println(hetersite[i]);
                 heterozygosity = (double) hetersite[i] / (hetersite[i] + homosite[i]);
+//                System.out.println(heterozygosity);
                 bw.write(samplelist.get(i) + "\t" + decfor.format(heterozygosity) + "\n");
             }
             bw.flush();
@@ -82,4 +93,5 @@ public class VCFutils {
             e.printStackTrace();
         }
     }
+
 }
