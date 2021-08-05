@@ -18,6 +18,7 @@ public class QC {
     String inputdir = null;
     String outputdir = null;
     String method = null;
+    String readsNumber = null;
 
     public QC(String[] args) {
         long startTimePoint = System.nanoTime();
@@ -30,6 +31,7 @@ public class QC {
         this.inputdir = args[0];
         this.outputdir = args[1];
         this.method = args[2];
+        this.readsNumber = args[3];
         File[] fs = new File(inputdir).listFiles();
         fs = IOUtils.listFilesEndsWith(fs, "R1.fq.gz");
         HashSet<String> nameSet = new HashSet<>();
@@ -65,6 +67,7 @@ public class QC {
                     Q2[i] = 0;
                 }
                 while ((read1 = br1.readLine()) != null) {
+                    if(countline >= Integer.parseInt(readsNumber))break;
                     countline++;
                     if (countline % 5000 == 0) {
                         System.out.println(countline);

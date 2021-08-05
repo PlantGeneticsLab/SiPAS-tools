@@ -18,7 +18,6 @@ import java.util.List;
  */
 public class VCFutils {
 
-
     String inputfile = null;
     String outputfile = null;
     String temp = null;

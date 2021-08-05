@@ -29,6 +29,7 @@ public class Entrance implements CLIInterface {
     String sampleInformationFileS = null;
     String library = null;
     String QCmethod = null;
+    String readsNumber = null;
 
     String GTFDir = null;
 
@@ -46,7 +47,8 @@ public class Entrance implements CLIInterface {
         options.addOption("outputFileDirS", true, "-outputFileDirS /User/bin/");
         options.addOption("sampleInformationFileS", true, "-sampleInformationFileS /User/bin/");
         options.addOption("library", true, "-library /User/bin/");
-        options.addOption("q",true,"-q mean or median");
+        options.addOption("QCmethod",true,"-QCmethod mean or median");
+        options.addOption("readsNumber",true,"-readsNumber number of reads used for Quality caculation");
     }
 
     @Override
@@ -63,8 +65,11 @@ public class Entrance implements CLIInterface {
             if( line.hasOption( "outputFileDirS" ) ) {
                 outputFileDirS=line.getOptionValue("outputFileDirS");
             }
-            if( line.hasOption( "q" ) ) {
-                inputFile =line.getOptionValue("q");
+            if( line.hasOption( "QCmethod" ) ) {
+                QCmethod =line.getOptionValue("QCmethod");
+            }
+            if( line.hasOption( "readsNumber" ) ) {
+                readsNumber =line.getOptionValue("readsNumber");
             }
             if( line.hasOption( "sampleInformationFileS" ) ) {
                 sampleInformationFileS=line.getOptionValue("sampleInformationFileS");
@@ -90,7 +95,7 @@ public class Entrance implements CLIInterface {
             new Parsing(news);
         }
         else if (app.equals(AppNames.QC.getName())) {
-            String[] news = {this.inputFile, this.outputFileDirS, this.QCmethod};
+            String[] news = {this.inputFile, this.outputFileDirS, this.QCmethod, this.readsNumber};
             new QC(news);
         }
         else if (app.equals(AppNames.Alignment.getName())) {
