@@ -28,6 +28,7 @@ public class Entrance implements CLIInterface {
     String outputFileDirS=null;
     String sampleInformationFileS = null;
     String library = null;
+    String QCmethod = null;
 
     String GTFDir = null;
 
@@ -45,6 +46,7 @@ public class Entrance implements CLIInterface {
         options.addOption("outputFileDirS", true, "-outputFileDirS /User/bin/");
         options.addOption("sampleInformationFileS", true, "-sampleInformationFileS /User/bin/");
         options.addOption("library", true, "-library /User/bin/");
+        options.addOption("q",true,"-q mean or median");
     }
 
     @Override
@@ -60,6 +62,9 @@ public class Entrance implements CLIInterface {
             }
             if( line.hasOption( "outputFileDirS" ) ) {
                 outputFileDirS=line.getOptionValue("outputFileDirS");
+            }
+            if( line.hasOption( "q" ) ) {
+                inputFile =line.getOptionValue("q");
             }
             if( line.hasOption( "sampleInformationFileS" ) ) {
                 sampleInformationFileS=line.getOptionValue("sampleInformationFileS");
@@ -85,7 +90,8 @@ public class Entrance implements CLIInterface {
             new Parsing(news);
         }
         else if (app.equals(AppNames.QC.getName())) {
-            new QC(this.parameterPath);
+            String[] news = {this.inputFile, this.outputFileDirS, this.QCmethod};
+            new QC(news);
         }
         else if (app.equals(AppNames.Alignment.getName())) {
             new Alignment(this.parameterPath);
