@@ -26,6 +26,9 @@ public class FastqFeature {
 
     public void getHashMap() {
         for (int i = 0; i < 41; i++) {
+            score[i] = i;
+        }
+        for (int i = 0; i < 41; i++) {
             scoreQMap.put(score[i], phreds[i]);
         }
         for (int i = 0; i < 41; i++) {

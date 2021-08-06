@@ -46,7 +46,7 @@ public class QC {
         }
         double[][] Q_R1 = new double[150][nameSet.size()];
         double[][] Q_R2 = new double[150][nameSet.size()];
-        nameSet.parallelStream().forEach(f -> {
+        nameSet.stream().forEach(f -> {
             System.out.println(f);
             BufferedReader br1 = IOUtils.getTextGzipReader(new File(inputdir, f + "_R1.fq.gz").getAbsolutePath());
             BufferedReader br2 = IOUtils.getTextGzipReader(new File(inputdir, f + "_R2.fq.gz").getAbsolutePath());
@@ -80,6 +80,8 @@ public class QC {
                     des2 = br2.readLine();
                     quality2 = br2.readLine();
                     for (int i = 0; i < quality1.length(); i++) {
+                        System.out.println(quality1.substring(i,i+1));
+                        System.out.println(FastqFeature.getscore(quality1.substring(i, i + 1)));
                         Q1[i] += FastqFeature.getscore(quality1.substring(i, i + 1));
                         Q2[i] += FastqFeature.getscore(quality2.substring(i, i + 1));
                     }
@@ -94,8 +96,8 @@ public class QC {
                 e.printStackTrace();
             }
         });
-        BufferedWriter bw1 = IOUtils.getTextWriter(new File(outputdir, "Quality_R1.txt").getAbsolutePath());
-        BufferedWriter bw2 = IOUtils.getTextWriter(new File(outputdir, "Quality_R2.txt").getAbsolutePath());
+        BufferedWriter bw1 = IOUtils.getTextWriter(new File(outputdir, "Quality_"+method+"_R1.txt").getAbsolutePath());
+        BufferedWriter bw2 = IOUtils.getTextWriter(new File(outputdir, "Quality_"+method+"_R2.txt").getAbsolutePath());
         try {
             DecimalFormat defor = new DecimalFormat("0.000");
             double value1 = 0;
