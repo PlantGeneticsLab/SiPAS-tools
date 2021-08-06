@@ -41,10 +41,11 @@ public class Entrance implements CLIInterface {
         options = new Options();
         options.addOption("a", true, "App. e.g. -a Parsing");
         options.addOption("f", true, "Parameter file path of an app. e.g. parameter_Alignment.txt");
-        options.addOption("inputFile", true, "-inputFile /User/bin/");
-        options.addOption("outputFileDirS", true, "-outputFileDirS /User/bin/");
-        options.addOption("sampleInformationFileS", true, "-sampleInformationFileS /User/bin/");
-        options.addOption("library", true, "-library /User/bin/");
+        options.addOption("i", true, "-inputFile /User/bin/");
+        options.addOption("o", true, "-outputFileDirS /User/bin/");
+        options.addOption("s", true, "-sampleInformationFileS /User/bin/");
+        options.addOption("l", true, "-library /User/bin/");
+        options.addOption("anno", true, "-anno /User/bin/");
     }
 
     @Override
@@ -55,20 +56,20 @@ public class Entrance implements CLIInterface {
             app = line.getOptionValue("a");
             parameterPath = line.getOptionValue("f");
 
-            if( line.hasOption( "inputFile" ) ) {
-                inputFile =line.getOptionValue("inputFile");
+            if( line.hasOption( "i" ) ) {
+                inputFile =line.getOptionValue("i");
             }
-            if( line.hasOption( "outputFileDirS" ) ) {
-                outputFileDirS=line.getOptionValue("outputFileDirS");
+            if( line.hasOption( "o" ) ) {
+                outputFileDirS=line.getOptionValue("o");
             }
-            if( line.hasOption( "sampleInformationFileS" ) ) {
-                sampleInformationFileS=line.getOptionValue("sampleInformationFileS");
+            if( line.hasOption( "s" ) ) {
+                sampleInformationFileS=line.getOptionValue("s");
             }
-            if( line.hasOption( "library" ) ) {
-                library=line.getOptionValue("library");
+            if( line.hasOption( "l" ) ) {
+                library=line.getOptionValue("l");
             }
-            if( line.hasOption( "GTFDir")){
-                GTFDir=line.getOptionValue("GTFDir");
+            if( line.hasOption( "anno")){
+                GTFDir=line.getOptionValue("anno");
             }
         }
         catch(Exception e) {

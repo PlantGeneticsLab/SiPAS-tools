@@ -36,7 +36,7 @@ public class Counting {
         }
         int count=0;List<File> fL1 = new ArrayList(Arrays.asList());
         for(int i=0;i<fList.size();i++){
-            if((i+1)/32==count && i!=fList.size()-1){//实现了同时跑t
+            if((i+1)/32==count && i!=fList.size()-1){
                 fL1.add(fList.get(i));
             }else{
                 fL1.add(fList.get(i));

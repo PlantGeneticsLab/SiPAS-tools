@@ -36,12 +36,12 @@ public class Parsing {
     String[] subDirS = {"subFastqs", "sams", "geneCount", "countTable"};
 
     public Parsing(String[] arg){
-        long startTimePoint = System.nanoTime();
+        long start = System.currentTimeMillis();
         this.parseParameters(arg);
         this.processTaxaAndBarcode();
         this.PEParse();
-        long endTimePoint = System.nanoTime();
-        System.out.println("Times:"+(endTimePoint-startTimePoint));
+        long end = System.currentTimeMillis();
+        System.out.println("Times:"+(end-start)/1000F);
     }
 
     private void PEParse () {
@@ -52,14 +52,14 @@ public class Parsing {
         Set<String> barcodeSet = new HashSet(barcodeLists);
         BufferedWriter[] bws1 = new BufferedWriter[barcodeLists.size()];
         BufferedWriter[] bws2 = new BufferedWriter[barcodeLists.size()];
-        HashMap barcodeWriterMap1 = new HashMap();
-        HashMap barcodeWriterMap2 = new HashMap();
+        HashMap<String,BufferedWriter> barcodeWriterMap1 = new HashMap();
+        HashMap<String,BufferedWriter> barcodeWriterMap2 = new HashMap();
         for (int i =0; i < subFqFileS1.length; i++){
             String taxon = btMap.get(barcodeLists.get(i));
-            subFqFileS1[i] = new File(subFqDirS,taxon+"_R1.fq.gz").getAbsolutePath();
-            subFqFileS2[i] = new File(subFqDirS,taxon+"_R2.fq.gz").getAbsolutePath();
-            bws1[i]=IOUtils.getTextGzipWriter(subFqFileS1[i]);
-            bws2[i]=IOUtils.getTextGzipWriter(subFqFileS2[i]);
+            subFqFileS1[i] = new File(subFqDirS,taxon+"_R1.fq").getAbsolutePath();
+            subFqFileS2[i] = new File(subFqDirS,taxon+"_R2.fq").getAbsolutePath();
+            bws1[i]=IOUtils.getTextWriter(subFqFileS1[i]);
+            bws2[i]=IOUtils.getTextWriter(subFqFileS2[i]);
             barcodeWriterMap1.put(barcodeLists.get(i),bws1[i]);
             barcodeWriterMap2.put(barcodeLists.get(i),bws2[i]);
         }
@@ -88,12 +88,12 @@ public class Parsing {
                 //*************************
                 currentBarcode = seq.substring(0, 8);
                 if (barcodeSet.contains(currentBarcode)) {
-                    tw1 = (BufferedWriter) barcodeWriterMap1.get(currentBarcode);
+                    tw1 = barcodeWriterMap1.get(currentBarcode);
                     tw1.write(temp);tw1.newLine();
                     tw1.write(seq);tw1.newLine();
                     tw1.write(br1.readLine());tw1.newLine();
                     tw1.write(br1.readLine());tw1.newLine();
-                    tw2 = (BufferedWriter) barcodeWriterMap2.get(currentBarcode);
+                    tw2 = barcodeWriterMap2.get(currentBarcode);
                     tw2.write(br2.readLine());tw2.newLine();
                     tw2.write(br2.readLine());tw2.newLine();
                     tw2.write(br2.readLine());tw2.newLine();
@@ -127,9 +127,9 @@ public class Parsing {
             try{
                 BufferedReader br = IOUtils.getTextReader(this.sampleInformationFileS);
                 BufferedWriter bw = IOUtils.getTextWriter(this.libraryInformationFileS);
-                String temp = null;bw.write("Library ID\tSample ID\tTaxa ID\tLand ID\tStage\tTissue\tBarcode\n");
+                String temp = null;bw.write("Sample ID\tTaxa ID\tStage\tTissue\tBarcode\n");
                 while ((temp = br.readLine()) != null) {
-                    if (temp.startsWith(this.library+"\t")){
+                    if (temp.split("\t")[0].startsWith(this.library)){
                         bw.write(temp+"\n");
                     }
                 }
@@ -158,14 +158,14 @@ public class Parsing {
         taxaLists = new ArrayList();
         barcodeTaxaMaps = new HashMap();
         for (int i = 0; i < t.getRowNumber(); i++) {
-            String taxon = t.getCell(i, 4)+t.getCell(i, 5)+"_"+this.library+"_"+t.getCell(i, 3);//输出的文件的名字
+            String taxon = t.getCell(i, 2)+t.getCell(i, 3)+"_"+t.getCell(i,0)+"_"+t.getCell(i, 1);//输出的文件的名字
             taxaLists.add(taxon);
-            barcodeLists.add(t.getCell(i, 6));
-            barcodeTaxaMaps.put(t.getCell(i, 6), taxon);
-            barcodeLengths.add(t.getCell(i, 6).length());
+            barcodeLists.add(t.getCell(i, 4));
+            barcodeTaxaMaps.put(t.getCell(i, 4), taxon);
+            barcodeLengths.add(t.getCell(i, 4).length());
         }
-        new File(this.outputFileDirS,"/"+this.inputFile.split("/")[this.inputFile.split("/").length-1].replace("_R1.fq.gz","").replace("_R2.fq.gz","")).mkdir();
-        outputDirs=new File(this.outputFileDirS,"/"+this.inputFile.split("/")[this.inputFile.split("/").length-1].replace("_R1.fq.gz","").replace("_R2.fq.gz","")).toString();
+        new File(this.outputFileDirS,"/"+this.library).mkdir();
+        outputDirs=new File(this.outputFileDirS,"/"+this.library).toString();
         for (int i =0;i< subDirS.length;i++){
             new File(outputDirs, subDirS[i]).mkdir();
         }
