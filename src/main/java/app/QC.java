@@ -1,5 +1,6 @@
 package app;
 
+import EDU.oswego.cs.dl.util.concurrent.Executor;
 import pgl.infra.table.RowTable;
 import pgl.infra.utils.IOUtils;
 import utils.FastqFeature;
@@ -27,11 +28,32 @@ public class QC {
         System.out.println("Times:" + (endTimePoint - startTimePoint));
     }
 
+    public void subsample(String[] args){
+        this.inputdir = new File(args[0],"/subFastqs").getAbsolutePath();
+        this.outputdir = new File(args[0],"/QC").getAbsolutePath();
+        this.method = args[1];
+        this.readsNumber = args[2];
+        File[] fs = new File(inputdir).listFiles();
+        fs = IOUtils.listFilesEndsWith(fs,".fq");
+        try {
+            for (int i = 0; i < fs.length; i++) {
+                StringBuilder sb = new StringBuilder();
+                sb.append("seqtk sample -s100 " + new File(inputdir, fs[i].getName()).getAbsolutePath() + " " + readsNumber + " > " + new File(outputdir, fs[i].getName()).getAbsolutePath());
+                String command = sb.toString();
+                String[] cmdarry = {"/bin/bash", "-c", command};
+                Process p = Runtime.getRuntime().exec(cmdarry, null, new File(inputdir));
+                p.waitFor();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
     public void getQuality(String[] args) {
-        this.inputdir = args[0];
-        this.outputdir = args[1];
-        this.method = args[2];
-        this.readsNumber = args[3];
+        this.inputdir = new File(args[0],"/QC").getAbsolutePath();
+        this.outputdir = new File(args[0],"/QC").getAbsolutePath();
+        this.method = args[1];
+        this.readsNumber = args[2];
         File[] fs = new File(inputdir).listFiles();
         fs = IOUtils.listFilesEndsWith(fs, "R1.fq.gz");
         HashSet<String> nameSet = new HashSet<>();

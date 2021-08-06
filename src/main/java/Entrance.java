@@ -25,7 +25,7 @@ public class Entrance implements CLIInterface {
     String parameters = null;
 
     String inputFile = null;
-    String outputFileDirS=null;
+    String outputFileDirS = null;
     String sampleInformationFileS = null;
     String library = null;
     String QCmethod = null;
@@ -33,9 +33,9 @@ public class Entrance implements CLIInterface {
 
     String GTFDir = null;
 
-    public Entrance (String[] args) {
+    public Entrance(String[] args) {
         this.createOptions();
-        this.retrieveParameters (args);
+        this.retrieveParameters(args);
     }
 
     @Override
@@ -47,8 +47,8 @@ public class Entrance implements CLIInterface {
         options.addOption("outputFileDirS", true, "-outputFileDirS /User/bin/");
         options.addOption("sampleInformationFileS", true, "-sampleInformationFileS /User/bin/");
         options.addOption("library", true, "-library /User/bin/");
-        options.addOption("QCmethod",true,"-QCmethod mean or median");
-        options.addOption("readsNumber",true,"-readsNumber number of reads used for Quality caculation");
+        options.addOption("QCmethod", true, "-QCmethod mean or median");
+        options.addOption("readsNumber", true, "-readsNumber number of reads used for Quality caculation");
     }
 
     @Override
@@ -59,29 +59,28 @@ public class Entrance implements CLIInterface {
             app = line.getOptionValue("a");
             parameterPath = line.getOptionValue("f");
 
-            if( line.hasOption( "inputFile" ) ) {
-                inputFile =line.getOptionValue("inputFile");
+            if (line.hasOption("inputFile")) {
+                inputFile = line.getOptionValue("inputFile");
             }
-            if( line.hasOption( "outputFileDirS" ) ) {
-                outputFileDirS=line.getOptionValue("outputFileDirS");
+            if (line.hasOption("outputFileDirS")) {
+                outputFileDirS = line.getOptionValue("outputFileDirS");
             }
-            if( line.hasOption( "QCmethod" ) ) {
-                QCmethod =line.getOptionValue("QCmethod");
+            if (line.hasOption("QCmethod")) {
+                QCmethod = line.getOptionValue("QCmethod");
             }
-            if( line.hasOption( "readsNumber" ) ) {
-                readsNumber =line.getOptionValue("readsNumber");
+            if (line.hasOption("readsNumber")) {
+                readsNumber = line.getOptionValue("readsNumber");
             }
-            if( line.hasOption( "sampleInformationFileS" ) ) {
-                sampleInformationFileS=line.getOptionValue("sampleInformationFileS");
+            if (line.hasOption("sampleInformationFileS")) {
+                sampleInformationFileS = line.getOptionValue("sampleInformationFileS");
             }
-            if( line.hasOption( "library" ) ) {
-                library=line.getOptionValue("library");
+            if (line.hasOption("library")) {
+                library = line.getOptionValue("library");
             }
-            if( line.hasOption( "GTFDir")){
-                GTFDir=line.getOptionValue("GTFDir");
+            if (line.hasOption("GTFDir")) {
+                GTFDir = line.getOptionValue("GTFDir");
             }
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);
         }
@@ -93,22 +92,17 @@ public class Entrance implements CLIInterface {
         if (app.equals(AppNames.Parsing.getName())) {
             String[] news = {this.inputFile, this.outputFileDirS, this.sampleInformationFileS, this.library};
             new Parsing(news);
-        }
-        else if (app.equals(AppNames.QC.getName())) {
-            String[] news = {this.inputFile, this.outputFileDirS, this.QCmethod, this.readsNumber};
+        } else if (app.equals(AppNames.QC.getName())) {
+            String[] news = {this.inputFile, this.QCmethod, this.readsNumber};
             new QC(news);
-        }
-        else if (app.equals(AppNames.Alignment.getName())) {
+        } else if (app.equals(AppNames.Alignment.getName())) {
             new Alignment(this.parameterPath);
-        }
-        else if (app.equals(AppNames.SampleValidation.getName())) {
+        } else if (app.equals(AppNames.SampleValidation.getName())) {
             new SampleValidation(this.parameterPath);
-        }
-        else if (app.equals(AppNames.Counting.getName())) {
+        } else if (app.equals(AppNames.Counting.getName())) {
             String[] news = {this.inputFile, this.GTFDir};
             new Counting(news);
-        }
-        else {
+        } else {
             System.out.println("App does not exist");
             this.printIntroductionAndUsage();
             System.exit(0);
@@ -118,7 +112,7 @@ public class Entrance implements CLIInterface {
             this.printIntroductionAndUsage();
             System.exit(0);
         }
-        File f = new File (this.parameterPath);
+        File f = new File(this.parameterPath);
         if (!f.exists()) {
             System.out.println("Parameter file does not exist");
             this.printIntroductionAndUsage();
@@ -147,7 +141,7 @@ public class Entrance implements CLIInterface {
         return sb.toString();
     }
 
-    public static void main (String[] args) {
+    public static void main(String[] args) {
         new Entrance(args);
     }
 
