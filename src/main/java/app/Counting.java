@@ -8,19 +8,23 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class Counting {
 
     String inputFileDirS = null;
     String GTFDir = null;
+    int threads = 32;
+    int currentThreads = 0;
+    int total = 0;
     String subDirS[] = {"geneCount","countTable"};
 
     public Counting(String[] arg) {
-        inputFileDirS = arg[0];GTFDir = arg[1];
-        this.HTSeqCount();
+        inputFileDirS = arg[0];GTFDir = arg[1];threads=Integer.parseInt(arg[2]);
+        this.HTseqCount();
         this.countTable();
     }
-    public void HTSeqCount(){
+    public void HTseqCount()  {
         for (int i =0 ; i< subDirS.length;i++){
             if (!new File(this.inputFileDirS, subDirS[i]).exists()){
                 new File(this.inputFileDirS, subDirS[i]).mkdir();
@@ -34,40 +38,72 @@ public class Counting {
                 fList.add(fs[i]);
             }
         }
-        int count=0;List<File> fL1 = new ArrayList(Arrays.asList());
-        for(int i=0;i<fList.size();i++){
-            if((i+1)/32==count && i!=fList.size()-1){
-                fL1.add(fList.get(i));
-            }else{
-                fL1.add(fList.get(i));
-                fL1.parallelStream().forEach(f -> {
-                    StringBuilder sb = new StringBuilder();
-                    sb.append("htseq-count").append(" -f bam -m intersection-nonempty -s no ");
-                    sb.append(f);
-                    sb.append(" "+this.GTFDir).append(" > ");
-                    if (f.getName().contains("Aligned.out.bam") ){
-                        sb.append(f.getName().replace("Aligned.out.bam", "Count.txt"));
-                    }
-                    if (f.getName().contains("Aligned.out.sorted.bam")){
-                        sb.append(f.getName().replace("Aligned.out.sorted.bam", "Count.txt"));
-                    }
-                    String command = sb.toString();
-                    System.out.println(command);
-                    try {
-                        File dir = new File(new File (this.inputFileDirS,subDirS[0]).getAbsolutePath());
-                        String []cmdarry ={"/bin/bash","-c",command};
-                        Process p=Runtime.getRuntime().exec(cmdarry,null,dir);
-                        p.waitFor();
-                    }
-                    catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    System.out.println("Finished"+f);
-                });
-                count++;
+        List<File> fL1 = new ArrayList(Arrays.asList());
+        for (int i=0;i<threads;i++){
+            fL1.add(fList.get(i));
+        }
+        total=threads;
+        this.runHTSeqCount(fL1);
+        fL1.clear();
+        while (total<fs.length){
+            currentThreads=this.monitor();
+            if (currentThreads<threads){
+                for (int j=total;j<(total+threads-currentThreads);j++){
+                    fL1.add(fList.get(j));
+                }
+                this.runHTSeqCount(fL1);
+                total=total+threads-currentThreads;
                 fL1.clear();
+            }else{
+                try{
+                    TimeUnit.MINUTES.sleep(1);
+                }
+                catch (Exception ex){
+                    ex.getStackTrace();
+                }
             }
         }
+    }
+    public int monitor (){
+        try{
+            String [] cmdarry ={"/bin/bash","-c","ps aux | grep htseq-count | wc -l"};
+            Process p =Runtime.getRuntime().exec(cmdarry,null);
+            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String temp = null;
+            while ((temp = br.readLine()) != null) {
+                currentThreads=(Integer.parseInt(temp)-1)/2;
+            }
+            p.waitFor();
+        }
+        catch (Exception ex){
+            ex.getStackTrace();
+        }
+        return currentThreads;
+    }
+    public void runHTSeqCount(List<File> fList){
+        fList.parallelStream().forEach(f -> {
+            StringBuilder sb = new StringBuilder();
+            sb.append("htseq-count").append(" -f bam -m intersection-nonempty -s no ");
+            sb.append(f);
+            sb.append(" "+this.GTFDir).append(" > ");
+            if (f.getName().contains("Aligned.out.bam") ){
+                sb.append(f.getName().replace("Aligned.out.bam", "Count.txt"));
+            }
+            if (f.getName().contains("Aligned.out.sorted.bam")){
+                sb.append(f.getName().replace("Aligned.out.sorted.bam", "Count.txt"));
+            }
+            String command = sb.toString();
+            System.out.println(command);
+            try {
+                File dir = new File(new File (this.inputFileDirS,subDirS[0]).getAbsolutePath());
+                String []cmdarry ={"/bin/bash","-c",command};
+                Process p=Runtime.getRuntime().exec(cmdarry,null,dir);
+                p.waitFor(2,TimeUnit.MINUTES);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
     public void countTable(){
             String subCountDirS = new File (this.inputFileDirS,subDirS[0]).getAbsolutePath();

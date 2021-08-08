@@ -43,43 +43,6 @@ public class Alignment {
             if (fs[i].isHidden()) continue;
             nameSet.add(fs[i].getName().replace(fs[i].getName().split("_")[fs[i].getName().split("_").length-1],""));
         }
-        File LN = new File(new File (subFqDirS)+"/"+"LN.txt");
-        if (LN.exists()) LN.delete();
-        List nameList = new ArrayList();
-        for (String t : nameSet){
-            nameList.add(t);
-        }
-        for (int k=0;k<nameList.size();k++){
-            StringBuilder sb = new StringBuilder();
-            sb.append("wc -l ").append(subFqDirS).append("/").append(nameList.get(k)).append("R1.fq >> ");
-            sb.append(subFqDirS).append("/").append("LN.txt");
-            String command = sb.toString();
-            System.out.println(command);
-            try{
-                File dir = new File(new File (subFqDirS).getAbsolutePath());
-                String [] cmdarry ={"/bin/bash","-c",command};
-                Process p1=Runtime.getRuntime().exec(cmdarry,null,dir);
-                p1.waitFor();p1.destroy();
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        try{
-            BufferedReader br = IOUtils.getTextReader(new File(subFqDirS)+"/"+"LN.txt");
-            String temp = null; int k =0;
-            while ((temp = br.readLine()) != null) {
-                if (Integer.parseInt(temp)/4 < this.miniReads){
-                    name2.add(nameList.get(k).toString());
-                }
-                name1.add(nameList.get(k).toString());
-                k++;
-            }
-            br.close();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
         nameSet.stream().forEach(f ->{
             String infile1 = new File (subFqDirS,f+"R1.fq").getAbsolutePath();
             String infile2 = new File (subFqDirS,f+"R2.fq").getAbsolutePath();

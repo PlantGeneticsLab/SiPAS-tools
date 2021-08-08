@@ -28,7 +28,7 @@ public class Entrance implements CLIInterface {
     String outputFileDirS=null;
     String sampleInformationFileS = null;
     String library = null;
-
+    int threads = 32;
     String GTFDir = null;
 
     public Entrance (String[] args) {
@@ -46,6 +46,7 @@ public class Entrance implements CLIInterface {
         options.addOption("s", true, "-sampleInformationFileS /User/bin/");
         options.addOption("l", true, "-library /User/bin/");
         options.addOption("anno", true, "-anno /User/bin/");
+        options.addOption("t", true, "-t 32");
     }
 
     @Override
@@ -71,6 +72,9 @@ public class Entrance implements CLIInterface {
             if( line.hasOption( "anno")){
                 GTFDir=line.getOptionValue("anno");
             }
+            if( line.hasOption( "t")){
+                threads=Integer.parseInt(line.getOptionValue("t"));
+            }
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -95,7 +99,7 @@ public class Entrance implements CLIInterface {
             new SampleValidation(this.parameterPath);
         }
         else if (app.equals(AppNames.Counting.getName())) {
-            String[] news = {this.inputFile, this.GTFDir};
+            String[] news = {this.inputFile, this.GTFDir,String.valueOf(this.threads)};
             new Counting(news);
         }
         else {
