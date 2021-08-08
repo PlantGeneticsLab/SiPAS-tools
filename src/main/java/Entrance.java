@@ -90,7 +90,8 @@ public class Entrance implements CLIInterface {
             new Parsing(news);
         }
         else if (app.equals(AppNames.QC.getName())) {
-            new QC(this.parameterPath);
+            String[] news ={};
+            new QC(news);
         }
         else if (app.equals(AppNames.Alignment.getName())) {
             new Alignment(this.parameterPath);
