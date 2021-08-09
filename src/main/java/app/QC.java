@@ -1,8 +1,7 @@
 package app;
 
-import EDU.oswego.cs.dl.util.concurrent.Executor;
-import pgl.infra.table.RowTable;
 import pgl.infra.utils.IOUtils;
+import utils.Command;
 import utils.FastqFeature;
 import utils.MathUtils;
 
@@ -13,6 +12,10 @@ import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 public class QC {
 
@@ -23,6 +26,7 @@ public class QC {
 
     public QC(String[] args) {
         long startTimePoint = System.nanoTime();
+        this.subsample(args);
         this.getQuality(args);
         long endTimePoint = System.nanoTime();
         System.out.println("Times:" + (endTimePoint - startTimePoint));
@@ -34,16 +38,19 @@ public class QC {
         this.method = args[1];
         this.readsNumber = args[2];
         File[] fs = new File(inputdir).listFiles();
-        fs = IOUtils.listFilesEndsWith(fs,".fq");
+        fs = IOUtils.listFilesEndsWith(fs,"R1.fq");
         try {
+            ExecutorService pool = Executors.newFixedThreadPool(12);
+            File dir = new File(new File(inputdir).getAbsolutePath());
             for (int i = 0; i < fs.length; i++) {
                 StringBuilder sb = new StringBuilder();
-                sb.append("seqtk sample -s100 " + new File(inputdir, fs[i].getName()).getAbsolutePath() + " " + readsNumber + " > " + new File(outputdir, fs[i].getName()).getAbsolutePath());
+                sb.append("seqtk sample -s100 " + new File(inputdir, fs[i].getName()).getAbsolutePath() + " " + readsNumber + " | gzip > " + new File(outputdir, fs[i].getName()).getAbsolutePath());
                 String command = sb.toString();
-                String[] cmdarry = {"/bin/bash", "-c", command};
-                Process p = Runtime.getRuntime().exec(cmdarry, null, new File(inputdir));
-                p.waitFor();
+                Command com = new Command(command, dir);
+                Future<Command> chrom = pool.submit(com);
             }
+            pool.shutdown();
+            pool.awaitTermination(Long.MAX_VALUE, TimeUnit.MICROSECONDS);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -89,8 +96,8 @@ public class QC {
                     Q2[i] = 0;
                 }
                 while ((read1 = br1.readLine()) != null) {
-                    if(countline >= Integer.parseInt(readsNumber))break;
                     countline++;
+                    if(countline > Integer.parseInt(readsNumber))break;
                     if (countline % 5000 == 0) {
                         System.out.println(countline);
                     }
@@ -102,8 +109,8 @@ public class QC {
                     des2 = br2.readLine();
                     quality2 = br2.readLine();
                     for (int i = 0; i < quality1.length(); i++) {
-                        System.out.println(quality1.substring(i,i+1));
-                        System.out.println(FastqFeature.getscore(quality1.substring(i, i + 1)));
+//                        System.out.println(quality1.substring(i,i+1));
+//                        System.out.println(FastqFeature.getscore(quality1.substring(i, i + 1)));
                         Q1[i] += FastqFeature.getscore(quality1.substring(i, i + 1));
                         Q2[i] += FastqFeature.getscore(quality2.substring(i, i + 1));
                     }
@@ -135,6 +142,10 @@ public class QC {
                 bw1.write(names[i] + "\t" + defor.format(value1) + "\n");
                 bw2.write(names[i] + "\t" + defor.format(value1) + "\n");
             }
+            bw1.flush();
+            bw1.close();
+            bw2.flush();
+            bw2.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
