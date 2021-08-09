@@ -30,6 +30,8 @@ public class Entrance implements CLIInterface {
     String library = null;
     int threads = 32;
     String GTFDir = null;
+    String QCmethod = null;
+    String readsNumber = null;
 
     public Entrance (String[] args) {
         this.createOptions();
@@ -47,6 +49,8 @@ public class Entrance implements CLIInterface {
         options.addOption("l", true, "-library /User/bin/");
         options.addOption("anno", true, "-anno /User/bin/");
         options.addOption("t", true, "-t 32");
+        options.addOption("m",true,"method mean or median");
+        options.addOption("r",true,"readsNumber");
     }
 
     @Override
@@ -75,6 +79,12 @@ public class Entrance implements CLIInterface {
             if( line.hasOption( "t")){
                 threads=Integer.parseInt(line.getOptionValue("t"));
             }
+            if(line.hasOption("m")){
+                QCmethod=line.getOptionValue("m");
+            }
+            if (line.hasOption("r")){
+                readsNumber=line.getOptionValue("r");
+            }
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -90,14 +100,16 @@ public class Entrance implements CLIInterface {
             new Parsing(news);
         }
         else if (app.equals(AppNames.QC.getName())) {
-            String[] news ={};
+            String[] news ={this.inputFile,this.QCmethod,this.readsNumber};
             new QC(news);
         }
         else if (app.equals(AppNames.Alignment.getName())) {
             new Alignment(this.parameterPath);
         }
         else if (app.equals(AppNames.SampleValidation.getName())) {
+            String[] news = {};
             new SampleValidation(this.parameterPath);
+//            new SampleValidation(news);
         }
         else if (app.equals(AppNames.Counting.getName())) {
             String[] news = {this.inputFile, this.GTFDir,String.valueOf(this.threads)};

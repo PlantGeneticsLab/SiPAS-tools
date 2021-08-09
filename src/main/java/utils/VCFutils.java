@@ -35,7 +35,7 @@ public class VCFutils {
     int[] hetersite;
     double heterozygosity;
 
-    public VCFutils() {
+    public VCFutils(String[] args) {
     }
 
     public void getHeter(String input, String output) {
