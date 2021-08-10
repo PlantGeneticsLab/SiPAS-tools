@@ -62,10 +62,10 @@ public class QC {
         this.method = args[2];
         this.readsNumber = args[3];
         File[] fs = new File(inputdir).listFiles();
-        fs = IOUtils.listFilesEndsWith(fs, "R1.fq.gz");
+        fs = IOUtils.listFilesEndsWith(fs, "R1.fq");
         HashSet<String> nameSet = new HashSet<>();
         for (int i = 0; i < fs.length; i++) {
-            nameSet.add(fs[i].getName().replace("_R1.fq.gz", ""));
+            nameSet.add(fs[i].getName().replace("_R1.fq", ""));
         }
         String[] names = nameSet.toArray(new String[0]);
         Arrays.sort(names);

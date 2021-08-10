@@ -59,8 +59,9 @@ public class Entrance implements CLIInterface {
         try {
             CommandLine line = parser.parse(options, args);
             app = line.getOptionValue("a");
-            parameterPath = line.getOptionValue("f");
-
+            if( line.hasOption( "f" ) ) {
+                parameterPath = line.getOptionValue("f");
+            }
             if( line.hasOption( "i" ) ) {
                 inputFile =line.getOptionValue("i");
             }
@@ -120,17 +121,17 @@ public class Entrance implements CLIInterface {
             this.printIntroductionAndUsage();
             System.exit(0);
         }
-        if (this.parameterPath == null) {
-            System.out.println("Parametar file does not exist");
-            this.printIntroductionAndUsage();
-            System.exit(0);
-        }
-        File f = new File (this.parameterPath);
-        if (!f.exists()) {
-            System.out.println("Parametar file does not exist");
-            this.printIntroductionAndUsage();
-            System.exit(0);
-        }
+//        if (this.parameterPath == null) {
+//            System.out.println("Parametar file does not exist");
+//            this.printIntroductionAndUsage();
+//            System.exit(0);
+//        }
+//        File f = new File (this.parameterPath);
+//        if (!f.exists()) {
+//            System.out.println("Parametar file does not exist");
+//            this.printIntroductionAndUsage();
+//            System.exit(0);
+//        }
     }
 
     @Override
