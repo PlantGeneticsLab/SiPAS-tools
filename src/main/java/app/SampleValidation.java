@@ -11,6 +11,7 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 
+
 public class SampleValidation {
 
     int chrNumber = 0;
@@ -41,7 +42,29 @@ public class SampleValidation {
         this.parameter();
         this.taxaRefBAM();
         this.Hapscanner();
+        this.getRNA();
+        this.getDNA();
+        this.getIBS();
+        this.getheter();
+        this.getQuality();
+        this.filtersample();
     }
+
+    private void filtersample() {
+    }
+
+    private void getheter() {
+    }
+
+    private void getQuality() {
+    }
+
+    private void getDNA() {
+    }
+
+    private void getRNA() {
+    }
+
 
     public void parseparameters(String infileS) {
         Dyad<List<String>, List<String>> d = AppUtils.getParameterList(infileS);
@@ -76,11 +99,18 @@ public class SampleValidation {
         output.mkdir();
 
         File RNAdir = new File(new File(outputDir, "RNA").getAbsolutePath());
-        File Isecdir = new File(new File(outputDir, "Isec").getAbsolutePath());
-        System.out.println(new File(outputDir, "RNA").getAbsolutePath());
+        File DNAdir = new File(new File(outputDir, "DNA").getAbsolutePath());
+        File Heterdir = new File(new File(outputDir,"Heter").getAbsolutePath());
+        File Qualitydir = new File(new File(outputDir,"Quality").getAbsolutePath());
+        File Summarydir = new File(new File(outputDir,"Summary").getAbsolutePath());
+
+//        System.out.println(new File(outputDir, "RNA").getAbsolutePath());
 
         RNAdir.mkdir();
-        Isecdir.mkdir();
+        DNAdir.mkdir();
+        Heterdir.mkdir();
+        Qualitydir.mkdir();
+        Summarydir.mkdir();
 
         if (RNAdir.isDirectory()) {
             System.out.println("Yes");
@@ -209,7 +239,7 @@ public class SampleValidation {
                 bw.write("Taxa\tReference\tBamPath\n");
                 for (int j = 0; j < namelist.length; j++) {
                     StringBuilder sb = new StringBuilder();
-                    sb.append(namelist[j]).append("\t");
+                    sb.append(namelist[j].replace("_Aligned.out.sorted.bam","")).append("\t");
                     sb.append(new File(referenceDir, "chr" + chr + ".fa").getAbsolutePath() + "\t");
                     sb.append(new File(BamDir,namelist[j]).getAbsolutePath());
                     bw.write(sb.toString());
