@@ -100,7 +100,7 @@ public class Entrance implements CLIInterface {
             new Parsing(news);
         }
         else if (app.equals(AppNames.QC.getName())) {
-            String[] news ={this.inputFile,this.QCmethod,this.readsNumber};
+            String[] news ={this.inputFile,this.outputFileDirS,this.QCmethod,this.readsNumber};
             new QC(news);
         }
         else if (app.equals(AppNames.Alignment.getName())) {

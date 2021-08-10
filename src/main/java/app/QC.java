@@ -33,10 +33,10 @@ public class QC {
     }
 
     public void subsample(String[] args){
-        this.inputdir = new File(args[0],"/subFastqs").getAbsolutePath();
-        this.outputdir = new File(args[0],"/QC").getAbsolutePath();
-        this.method = args[1];
-        this.readsNumber = args[2];
+        this.inputdir = new File(args[0]).getAbsolutePath();
+        this.outputdir = new File(args[1]).getAbsolutePath();
+        this.method = args[2];
+        this.readsNumber = args[3];
         File[] fs = new File(inputdir).listFiles();
         fs = IOUtils.listFilesEndsWith(fs,"R1.fq");
         try {
@@ -57,10 +57,10 @@ public class QC {
     }
 
     public void getQuality(String[] args) {
-        this.inputdir = new File(args[0],"/QC").getAbsolutePath();
-        this.outputdir = new File(args[0],"/QC").getAbsolutePath();
-        this.method = args[1];
-        this.readsNumber = args[2];
+        this.inputdir = new File(args[1]).getAbsolutePath();
+        this.outputdir = new File(args[1]).getAbsolutePath();
+        this.method = args[2];
+        this.readsNumber = args[3];
         File[] fs = new File(inputdir).listFiles();
         fs = IOUtils.listFilesEndsWith(fs, "R1.fq.gz");
         HashSet<String> nameSet = new HashSet<>();
