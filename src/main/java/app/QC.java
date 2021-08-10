@@ -38,7 +38,7 @@ public class QC {
         this.method = args[2];
         this.readsNumber = args[3];
         File[] fs = new File(inputdir).listFiles();
-        fs = IOUtils.listFilesEndsWith(fs,"R1.fq");
+        fs = IOUtils.listFilesEndsWith(fs,".fq");
         try {
             ExecutorService pool = Executors.newFixedThreadPool(12);
             File dir = new File(new File(inputdir).getAbsolutePath());
