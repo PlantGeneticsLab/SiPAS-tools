@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import utils.MonitorUtils;
 
 public class Counting {
 
@@ -17,7 +18,7 @@ public class Counting {
     int threads = 32;
     int currentThreads = 0;
     int total = 0;
-    String subDirS[] = {"geneCount","countTable"};
+    String[] subDirS = {"geneCount","countTable"};
 
     public Counting(String[] arg) {
         inputFileDirS = arg[0];GTFDir = arg[1];threads=Integer.parseInt(arg[2]);
@@ -45,40 +46,28 @@ public class Counting {
         total=threads;
         this.runHTSeqCount(fL1);
         fL1.clear();
-        while (total<fs.length){
-            currentThreads=this.monitor();
-            if (currentThreads<threads){
-                for (int j=total;j<(total+threads-currentThreads);j++){
-                    fL1.add(fList.get(j));
-                }
-                this.runHTSeqCount(fL1);
-                total=total+threads-currentThreads;
-                fL1.clear();
-            }else{
-                try{
+        try {
+            while (total<fs.length){
+                currentThreads=MonitorUtils.monitor("htseq-count");
+                if (currentThreads<threads){
+                    if(total==fs.length)break;
+                    for (int j=total;j<(total+threads-currentThreads);j++){
+                        fL1.add(fList.get(j));
+                    }
+                    this.runHTSeqCount(fL1);
+                    total=total+threads-currentThreads;
+                    fL1.clear();
+                }else{
                     TimeUnit.MINUTES.sleep(1);
                 }
-                catch (Exception ex){
-                    ex.getStackTrace();
-                }
             }
-        }
-    }
-    public int monitor (){
-        try{
-            String [] cmdarry ={"/bin/bash","-c","ps aux | grep htseq-count | wc -l"};
-            Process p =Runtime.getRuntime().exec(cmdarry,null);
-            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            String temp = null;
-            while ((temp = br.readLine()) != null) {
-                currentThreads=(Integer.parseInt(temp)-1)/2;
+            while(MonitorUtils.monitor("htseq-count")!=0){
+                TimeUnit.MINUTES.sleep(1);
             }
-            p.waitFor();
         }
         catch (Exception ex){
             ex.getStackTrace();
         }
-        return currentThreads;
     }
     public void runHTSeqCount(List<File> fList){
         fList.parallelStream().forEach(f -> {
@@ -109,7 +98,7 @@ public class Counting {
             String subCountDirS = new File (this.inputFileDirS,subDirS[0]).getAbsolutePath();
             File[] fs = new File(subCountDirS).listFiles();
             fs = IOUtils.listFilesEndsWith(fs, "Count.txt");
-            ArrayList fileList = (ArrayList) Arrays.asList(fs);
+            ArrayList fileList = new ArrayList(Arrays.asList(fs));
             //Begin to merge
             int geneNumber=0;
             Set<String> geneSet = new HashSet<String>();

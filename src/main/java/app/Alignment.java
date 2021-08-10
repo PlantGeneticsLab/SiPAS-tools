@@ -23,8 +23,8 @@ public class Alignment {
     String STARPath = null;
     String subDirS[] = {"sams","QC"};
 
-    public Alignment(String parameterPath) {
-        this.parseParameters(parameterPath);
+    public Alignment(String parameterFileS) {
+        this.parseParameters(parameterFileS);
         this.starAlignmentPEAndSortIndex();
     }
 

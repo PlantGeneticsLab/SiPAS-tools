@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * Utilities of TIGER apps
- * @author feilu
+ * @author
  */
 public class AppUtils {
 
