@@ -1,9 +1,9 @@
 package app;
 
-import pgl.AppUtils;
 import pgl.app.hapScanner.HapScanner;
 import pgl.infra.utils.Dyad;
 import pgl.infra.utils.IOUtils;
+import utils.AppUtils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
