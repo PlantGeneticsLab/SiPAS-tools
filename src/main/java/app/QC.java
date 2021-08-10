@@ -44,7 +44,7 @@ public class QC {
             File dir = new File(new File(inputdir).getAbsolutePath());
             for (int i = 0; i < fs.length; i++) {
                 StringBuilder sb = new StringBuilder();
-                sb.append("seqtk sample -s100 " + new File(inputdir, fs[i].getName()).getAbsolutePath() + " " + readsNumber + " | gzip > " + new File(outputdir, fs[i].getName()).getAbsolutePath());
+                sb.append("seqtk sample -s100 " + new File(inputdir, fs[i].getName()).getAbsolutePath() + " " + readsNumber + " | gzip > " + new File(outputdir, fs[i].getName().replace("fq","fq.gz")).getAbsolutePath());
                 String command = sb.toString();
                 Command com = new Command(command, dir);
                 Future<Command> chrom = pool.submit(com);
@@ -111,8 +111,8 @@ public class QC {
                     for (int i = 0; i < quality1.length(); i++) {
 //                        System.out.println(quality1.substring(i,i+1));
 //                        System.out.println(FastqFeature.getscore(quality1.substring(i, i + 1)));
-                        Q1[i] += FastqFeature.getscore(quality1.substring(i, i + 1));
-                        Q2[i] += FastqFeature.getscore(quality2.substring(i, i + 1));
+                        Q1[i] += (double) FastqFeature.getscore(quality1.substring(i, i + 1));
+                        Q2[i] += (double) FastqFeature.getscore(quality2.substring(i, i + 1));
                     }
                 }
                 br1.close();
