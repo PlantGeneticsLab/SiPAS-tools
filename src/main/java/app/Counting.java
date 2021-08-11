@@ -85,7 +85,7 @@ public class Counting {
             System.out.println(command);
             try {
                 File dir = new File(new File (this.inputFileDirS,subDirS[0]).getAbsolutePath());
-                String []cmdarry ={"/bin/bash","-c",command};
+                String[] cmdarry ={"/bin/bash","-c",command};
                 Process p=Runtime.getRuntime().exec(cmdarry,null,dir);
                 p.waitFor(2,TimeUnit.MINUTES);
             }
@@ -107,7 +107,7 @@ public class Counting {
             String command = wc.toString();
             System.out.println(command);
             try {
-                String [] cmdarry ={"/bin/bash","-c",command};
+                String[] cmdarry ={"/bin/bash","-c",command};
                 Process p =Runtime.getRuntime().exec(cmdarry,null);
                 BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
                 String temp = null;
@@ -163,9 +163,9 @@ public class Counting {
                     sb = new StringBuilder();
                     for(int i=0;i<fileList.size();i++){
                         if(i==0){
-                            sb.append(nameList.get(k)+"\t");
+                            sb.append(nameList.get(k)).append("\t");
                         }
-                        sb.append(count[k][i]+"\t");
+                        sb.append(count[k][i]).append("\t");
                     }
                     bw.write(sb.toString().replaceAll("\\s+$", ""));
                     bw.newLine();

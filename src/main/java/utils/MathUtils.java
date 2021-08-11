@@ -2,6 +2,7 @@ package utils;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @ author: yxh
@@ -20,6 +21,15 @@ public class MathUtils {
             average += array[i];
         }
         average = average / array.length;
+        return average;
+    }
+
+    public static double getmean(List<Double> array) {
+        double average = 0;
+        for (int i = 0; i < array.size(); i++) {
+            average += array.get(i);
+        }
+        average = average / array.size();
         return average;
     }
 
@@ -84,6 +94,16 @@ public class MathUtils {
             median = (array[array.length / 2] + array[array.length / 2 - 1]) / 2;
         }
         return median;
+    }
+
+    public static double getmedian(List<Double> arrays) {
+        double[] array = new double[arrays.size()];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = arrays.get(i).doubleValue();  // java 1.4 style
+            // or:
+//            target[i] = doubles.get(i);                // java 1.5+ style (outboxing)
+        }
+        return getmedian(array);
     }
 
     /**

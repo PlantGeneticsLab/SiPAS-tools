@@ -21,7 +21,7 @@ public class Alignment {
     String GTFDir = null;
     String refDir = null;
     String STARPath = null;
-    String subDirS[] = {"sams","QC"};
+    String[] subDirS = {"sams","QC"};
 
     public Alignment(String parameterFileS) {
         this.parseParameters(parameterFileS);
