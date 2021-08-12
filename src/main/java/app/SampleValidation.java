@@ -40,18 +40,12 @@ public class SampleValidation {
     String BamDir = null;
     String genotypesuffix = ".360.vcf.gz";
 
+    String QCdir = null;
+    String method = null;
+
 
     public SampleValidation(String parameterPath) {
         this.getVCF(parameterPath);
-//        this.correction();
-//        this.getIBS();
-    }
-
-    public void getVCF(String parameterPath) {
-        this.parseparameters(parameterPath);
-        this.parameter();
-        this.taxaRefBAM();
-        this.Hapscanner();
         this.getRNA();
         this.getDNA();
         this.getMerge();
@@ -61,6 +55,14 @@ public class SampleValidation {
 //        this.getQuality();
         this.filtersample();
         this.getDensityHeatmap();
+    }
+
+    public void getVCF(String parameterPath) {
+        this.parseparameters(parameterPath);
+        this.parameter();
+        this.taxaRefBAM();
+        this.Hapscanner();
+
     }
 
     private void getDensityHeatmap(){
@@ -444,6 +446,8 @@ public class SampleValidation {
         threads = pLineList.get(10);
         chrNumber = Integer.parseInt(pLineList.get(11));
         rate = Integer.parseInt(pLineList.get(12));
+        QCdir = pLineList.get(13);
+        method = pLineList.get(14);
 
         File posdir = new File(new File(posDir).getAbsolutePath());
         File posAlleledir = new File(new File(posAlleleDir).getAbsolutePath());
@@ -622,7 +626,8 @@ public class SampleValidation {
 
     public void getFixedIBS(){
         this.getheter();
-        this.getQuality();
+        String input1 = new File(outputDir,"Heter/heterozygosity.txt").getAbsolutePath();
+        String input2 = new File(QCdir,"Quality_"+method+"_R1.txt").getAbsolutePath();
         String output = new File(outputDir,"Summary/check.txt").getAbsolutePath();
     }
 
