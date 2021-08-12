@@ -1,0 +1,53 @@
+@Author: Xiaohan
+@Email: xhanyang@genetics.ac.cn
+
+#This hapscanner pipeline is used to test the IBS matrix and give the final possible samples
+
+#####File parameter -- genotypeDir,bamDir,outputDir,plate
+#Parameter1:	GenotypeDir
+/data1/home/junxu/genotypeMaf005
+
+#Parameter2:	BamDir
+/data2/junxu/SiPAS-tools/1_0
+
+#Parameter3:	plate
+1_0
+
+#Parameter4:	OutputDir
+/data2/xiaohan/hapscanner/outputNew
+
+#######Hapscanner parameter -- parameterDir,taxaRefBAMDir,posDir,posAlleleDir,referenceDir
+#Parameter5:	parameterDir
+/data2/xiaohan/hapscanner/parameter
+
+#Parameter6:	taxaRefBAMDir
+/data2/xiaohan/hapscanner/taxaRefBAM
+
+#Parameter7:	posDir
+/data2/xiaohan/hapscanner/poseQTL
+
+#Parameter8:	posAlleleDir
+/data2/xiaohan/hapscanner/posAlleleeQTL
+
+#Parameter9:	referenceDir
+/data2/xiaohan/hapscanner/ref
+
+######utils
+#Parameter10:	samtools
+/data1/home/xiaohan/miniconda3/bin/samtools
+
+#Parameter11:	thread
+12
+
+#Parameter12:	chrNumber
+42
+
+########SampleValidation parameter -- 
+#Parameter13:   rate
+0.4
+
+#Parameter14:   Qcdir
+/data2/xiaohan/fastqc/1_0
+
+#Parameter15:   QCmethod
+median
