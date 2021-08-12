@@ -133,11 +133,11 @@ public class QC {
             double value2 = 0;
             for (int i = 0; i < names.length; i++) {
                 if(method.equals("mean")) {
-                    value1 = MathUtils.getmean(Q_R1[i]);
-                    value2 = MathUtils.getmean(Q_R1[i]);
+                    value1 = MathUtils.getMean(Q_R1[i]);
+                    value2 = MathUtils.getMean(Q_R1[i]);
                 }else if (method.equals("median")) {
-                    value1 = MathUtils.getmedian(Q_R1[i]);
-                    value2 = MathUtils.getmedian(Q_R1[i]);
+                    value1 = MathUtils.getMedian(Q_R1[i]);
+                    value2 = MathUtils.getMedian(Q_R1[i]);
                 }
                 bw1.write(names[i] + "\t" + defor.format(value1) + "\n");
                 bw2.write(names[i] + "\t" + defor.format(value2) + "\n");

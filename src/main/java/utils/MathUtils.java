@@ -15,7 +15,7 @@ public class MathUtils {
      * get average or mean from an array
      * @return
      */
-    public static double getmean(double[] array) {
+    public static double getMean(double[] array) {
         double average = 0;
         for (int i = 0; i < array.length; i++) {
             average += array[i];
@@ -24,7 +24,7 @@ public class MathUtils {
         return average;
     }
 
-    public static double getmean(List<Double> array) {
+    public static double getMean(List<Double> array) {
         double average = 0;
         for (int i = 0; i < array.size(); i++) {
             average += array.get(i);
@@ -40,7 +40,7 @@ public class MathUtils {
      */
     public static double getsd(double[] array) {
         double sd = 0;
-        double average = getmean(array);
+        double average = getMean(array);
         for (int i = 0; i < array.length; i++) {
             sd += (array[i] - average) * (array[i] - average);
         }
@@ -56,7 +56,7 @@ public class MathUtils {
      */
     public static double getvar(double[] array) {
         double var = 0;
-        double average = getmean(array);
+        double average = getMean(array);
         for (int i = 0; i < array.length; i++) {
             var += (array[i] - average) * (array[i] - average);
         }
@@ -69,9 +69,9 @@ public class MathUtils {
      * get zscores from an array
      * @return
      */
-    public static double[] getzscore(double[] array) {
+    public static double[] getZscore(double[] array) {
         double sd = getsd(array);
-        double average = getmean(array);
+        double average = getMean(array);
         double[] zscore = new double[array.length];
         for (int i = 0; i < array.length; i++) {
             zscore[i] = (array[i] - average) / sd;
@@ -85,7 +85,7 @@ public class MathUtils {
      * @return
      */
 
-    public static double getmedian(double[] array) {
+    public static double getMedian(double[] array) {
         double median = 0;
         Arrays.sort(array);
         if (array.length % 2 == 1) {
@@ -96,14 +96,14 @@ public class MathUtils {
         return median;
     }
 
-    public static double getmedian(List<Double> arrays) {
+    public static double getMedian(List<Double> arrays) {
         double[] array = new double[arrays.size()];
         for (int i = 0; i < array.length; i++) {
             array[i] = arrays.get(i).doubleValue();  // java 1.4 style
             // or:
 //            target[i] = doubles.get(i);                // java 1.5+ style (outboxing)
         }
-        return getmedian(array);
+        return getMedian(array);
     }
 
     /**
