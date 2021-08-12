@@ -42,10 +42,10 @@ public class VCFutils {
         this.inputfile = input;
         this.outputfile = output;
         List<String> samplelist = new ArrayList<>();
-        BufferedReader br ;
-        if(input.endsWith("gz")){
+        BufferedReader br;
+        if (input.endsWith("gz")) {
             br = IOUtils.getTextGzipReader(inputfile);
-        }else {
+        } else {
             br = IOUtils.getTextReader(inputfile);
         }
         BufferedWriter bw = IOUtils.getTextWriter(outputfile);
@@ -99,9 +99,9 @@ public class VCFutils {
         }
     }
 
-    public void getHeterozygosity(String VCF,String output){
+    public static void getHeterozygosity(String VCF, String output) {
         String input = new File(VCF).getAbsolutePath();
-        GenotypeGrid g = new GenotypeGrid(input,GenoIOFormat.VCF);
+        GenotypeGrid g = new GenotypeGrid(input, GenoIOFormat.VCF);
         BufferedWriter bw = IOUtils.getTextWriter(output);
         String[] names = g.getTaxaNames();
         int homosite = 0;
@@ -112,17 +112,17 @@ public class VCFutils {
                 hetersite = g.getHeterozygoteNumberByTaxon(i);
                 homosite = g.getHomozygoteNumberByTaxon(i);
                 heterozygosity = (double) hetersite / (hetersite + homosite);
-                bw.write(names[i] + "\t" + heterozygosity + "\n");
+                bw.write(names[i] + "\t" + hetersite + "\t" + homosite + "\t" + heterozygosity + "\n");
             }
             bw.flush();
             bw.close();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
-    public void getIBS(String VCF1,String VCF2,String outputfile){
+    public void getIBS(String VCF1, String VCF2, String outputfile) {
         String vcf1 = new File(VCF1).getAbsolutePath();
         String vcf2 = new File(VCF2).getAbsolutePath();
         String out = new File(outputfile).getAbsolutePath();

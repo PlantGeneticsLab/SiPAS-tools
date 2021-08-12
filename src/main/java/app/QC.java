@@ -140,7 +140,7 @@ public class QC {
                     value2 = MathUtils.getmedian(Q_R1[i]);
                 }
                 bw1.write(names[i] + "\t" + defor.format(value1) + "\n");
-                bw2.write(names[i] + "\t" + defor.format(value1) + "\n");
+                bw2.write(names[i] + "\t" + defor.format(value2) + "\n");
             }
             bw1.flush();
             bw1.close();

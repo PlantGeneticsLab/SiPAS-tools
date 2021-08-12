@@ -12,7 +12,7 @@ public class ArrayUtils {
      * @param arr
      * @return the smallest value and smallest index
      */
-    public static double[] Min(double[] arr,int number){
+    public static double[] Min(double[] arr){
         double min1 = arr[0];
         int index1 = 0;
         for (int i = 1; i < arr.length; i++) {
