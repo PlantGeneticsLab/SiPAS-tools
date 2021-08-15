@@ -29,9 +29,14 @@ public enum AppNames implements Comparable <AppNames> {
     SampleValidation ("SampleValidation"),
 
     /**
-     * Quantification of gene expression and get coutTable.
+     * Quantification of gene expression.
      */
-    Counting ("Counting");
+    Counting ("Counting"),
+
+    /**
+     * Merging the gene expresion of each sample to a countTable.
+     */
+    Merging ("Merging");
 
     public final String name;
 

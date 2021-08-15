@@ -115,6 +115,9 @@ public class Entrance implements CLIInterface {
             String[] news = {this.inputFile, this.GTFDir,String.valueOf(this.threads)};
             new Counting(news);
         }
+        else if (app.equals(AppNames.Merging.getName())) {
+            new Alignment(this.parameterPath);
+        }
         else {
             System.out.println("App does not exist");
             this.printIntroductionAndUsage();
@@ -126,7 +129,7 @@ public class Entrance implements CLIInterface {
             System.exit(0);
         }
         File f = new File (this.parameterPath);
-        if (!f.exists()) {
+        if ((app=="a" && !f.exists()) || (app=="s" && !f.exists())) {
             System.out.println("Parametar file does not exist");
             this.printIntroductionAndUsage();
             System.exit(0);

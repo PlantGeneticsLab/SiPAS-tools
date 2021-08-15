@@ -88,6 +88,7 @@ public class Parsing {
                 //*************************
                 currentBarcode = seq.substring(0, 8);
                 if (barcodeSet.contains(currentBarcode)) {
+                    cnt++;
                     tw1 = barcodeWriterMap1.get(currentBarcode);
                     tw1.write(temp);tw1.newLine();
                     tw1.write(seq);tw1.newLine();
