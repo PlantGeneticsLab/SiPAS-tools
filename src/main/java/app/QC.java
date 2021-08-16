@@ -62,10 +62,10 @@ public class QC {
         this.method = args[2];
         this.readsNumber = args[3];
         File[] fs = new File(inputdir).listFiles();
-        fs = IOUtils.listFilesEndsWith(fs, "R1.fq");
+        fs = IOUtils.listFilesEndsWith(fs, "R1.fq.gz");
         HashSet<String> nameSet = new HashSet<>();
         for (int i = 0; i < fs.length; i++) {
-            nameSet.add(fs[i].getName().replace("_R1.fq", ""));
+            nameSet.add(fs[i].getName().replace("_R1.fq.gz", ""));
         }
         String[] names = nameSet.toArray(new String[0]);
         Arrays.sort(names);
@@ -73,8 +73,8 @@ public class QC {
         for (int i = 0; i < names.length; i++) {
             nameMap.put(names[i], i);
         }
-        double[][] Q_R1 = new double[150][nameSet.size()];
-        double[][] Q_R2 = new double[150][nameSet.size()];
+        double[][] Q_R1 = new double[nameSet.size()][150];
+        double[][] Q_R2 = new double[nameSet.size()][150];
         nameSet.stream().forEach(f -> {
             System.out.println(f);
             BufferedReader br1 = IOUtils.getTextGzipReader(new File(inputdir, f + "_R1.fq.gz").getAbsolutePath());
@@ -118,8 +118,8 @@ public class QC {
                 br1.close();
                 br2.close();
                 for (int i = 0; i < 150; i++) {
-                    Q_R1[i][nameMap.get(f)] = (double) Q1[i] / countline;
-                    Q_R2[i][nameMap.get(f)] = (double) Q2[i] / countline;
+                    Q_R1[nameMap.get(f)][i] = (double) Q1[i] / countline;
+                    Q_R2[nameMap.get(f)][i] = (double) Q2[i] / countline;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -134,10 +134,10 @@ public class QC {
             for (int i = 0; i < names.length; i++) {
                 if(method.equals("mean")) {
                     value1 = MathUtils.getMean(Q_R1[i]);
-                    value2 = MathUtils.getMean(Q_R1[i]);
+                    value2 = MathUtils.getMean(Q_R2[i]);
                 }else if (method.equals("median")) {
                     value1 = MathUtils.getMedian(Q_R1[i]);
-                    value2 = MathUtils.getMedian(Q_R1[i]);
+                    value2 = MathUtils.getMedian(Q_R2[i]);
                 }
                 bw1.write(names[i] + "\t" + defor.format(value1) + "\n");
                 bw2.write(names[i] + "\t" + defor.format(value2) + "\n");
