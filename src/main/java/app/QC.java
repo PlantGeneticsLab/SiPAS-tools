@@ -19,32 +19,32 @@ import java.util.concurrent.TimeUnit;
 
 public class QC {
 
-    String inputdir = null;
-    String outputdir = null;
+    String inputDir = null;
+    String outputDir = null;
     String method = null;
     String readsNumber = null;
 
     public QC(String[] args) {
         long startTimePoint = System.nanoTime();
-        this.subsample(args);
+        this.subSample(args);
         this.getQuality(args);
         long endTimePoint = System.nanoTime();
         System.out.println("Times:" + (endTimePoint - startTimePoint));
     }
 
-    public void subsample(String[] args){
-        this.inputdir = new File(args[0]).getAbsolutePath();
-        this.outputdir = new File(args[1]).getAbsolutePath();
+    public void subSample(String[] args){
+        this.inputDir = new File(args[0]).getAbsolutePath();
+        this.outputDir = new File(args[1]).getAbsolutePath();
         this.method = args[2];
         this.readsNumber = args[3];
-        File[] fs = new File(inputdir).listFiles();
+        File[] fs = new File(inputDir).listFiles();
         fs = IOUtils.listFilesEndsWith(fs,".fq");
         try {
             ExecutorService pool = Executors.newFixedThreadPool(12);
-            File dir = new File(new File(inputdir).getAbsolutePath());
+            File dir = new File(new File(inputDir).getAbsolutePath());
             for (int i = 0; i < fs.length; i++) {
                 StringBuilder sb = new StringBuilder();
-                sb.append("seqtk sample -s100 " + new File(inputdir, fs[i].getName()).getAbsolutePath() + " " + readsNumber + " | gzip > " + new File(outputdir, fs[i].getName().replace("fq","fq.gz")).getAbsolutePath());
+                sb.append("seqtk sample -s100 " + new File(inputDir, fs[i].getName()).getAbsolutePath() + " " + readsNumber + " | gzip > " + new File(outputDir, fs[i].getName().replace("fq","fq.gz")).getAbsolutePath());
                 String command = sb.toString();
                 Command com = new Command(command, dir);
                 Future<Command> chrom = pool.submit(com);
@@ -57,11 +57,11 @@ public class QC {
     }
 
     public void getQuality(String[] args) {
-        this.inputdir = new File(args[1]).getAbsolutePath();
-        this.outputdir = new File(args[1]).getAbsolutePath();
+        this.inputDir = new File(args[1]).getAbsolutePath();
+        this.outputDir = new File(args[1]).getAbsolutePath();
         this.method = args[2];
         this.readsNumber = args[3];
-        File[] fs = new File(inputdir).listFiles();
+        File[] fs = new File(inputDir).listFiles();
         fs = IOUtils.listFilesEndsWith(fs, "R1.fq.gz");
         HashSet<String> nameSet = new HashSet<>();
         for (int i = 0; i < fs.length; i++) {
@@ -77,8 +77,8 @@ public class QC {
         double[][] Q_R2 = new double[nameSet.size()][150];
         nameSet.stream().forEach(f -> {
             System.out.println(f);
-            BufferedReader br1 = IOUtils.getTextGzipReader(new File(inputdir, f + "_R1.fq.gz").getAbsolutePath());
-            BufferedReader br2 = IOUtils.getTextGzipReader(new File(inputdir, f + "_R2.fq.gz").getAbsolutePath());
+            BufferedReader br1 = IOUtils.getTextGzipReader(new File(inputDir, f + "_R1.fq.gz").getAbsolutePath());
+            BufferedReader br2 = IOUtils.getTextGzipReader(new File(inputDir, f + "_R2.fq.gz").getAbsolutePath());
             String read1 = null;
             String seq1 = null;
             String des1 = null;
@@ -125,8 +125,8 @@ public class QC {
                 e.printStackTrace();
             }
         });
-        BufferedWriter bw1 = IOUtils.getTextWriter(new File(outputdir, "Quality_"+method+"_R1.txt").getAbsolutePath());
-        BufferedWriter bw2 = IOUtils.getTextWriter(new File(outputdir, "Quality_"+method+"_R2.txt").getAbsolutePath());
+        BufferedWriter bw1 = IOUtils.getTextWriter(new File(outputDir, "Quality_"+method+"_R1.txt").getAbsolutePath());
+        BufferedWriter bw2 = IOUtils.getTextWriter(new File(outputDir, "Quality_"+method+"_R2.txt").getAbsolutePath());
         try {
             DecimalFormat defor = new DecimalFormat("0.000");
             double value1 = 0;

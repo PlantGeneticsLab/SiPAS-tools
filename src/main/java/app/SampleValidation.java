@@ -58,10 +58,10 @@ public class SampleValidation {
     }
 
     public void getVCF(String parameterPath) {
-        this.parseparameters(parameterPath);
+        this.parseParameters(parameterPath);
         this.parameter();
         this.taxaRefBAM();
-        this.Hapscanner();
+        this.HapScanner();
 
     }
 
@@ -260,7 +260,7 @@ public class SampleValidation {
         System.out.println("End of program.");
     }
 
-    private void getheter() {
+    private void getHeter() {
         String input = new File(outputDir,"RNA/RNAall.vcf").getAbsolutePath();
         String output = new File(outputDir,"Heter/heterozygosity.txt").getAbsolutePath();
         VCFutils.getHeterozygosity(input,output);
@@ -420,6 +420,7 @@ public class SampleValidation {
                 bw.flush();
                 bw.close();
             } catch (Exception e) {
+                System.exit(1);
             }
         });
         long endTime = System.currentTimeMillis(); //获取结束时间
@@ -427,7 +428,7 @@ public class SampleValidation {
     }
 
 
-    public void parseparameters(String infileS) {
+    public void parseParameters(String infileS) {
         Dyad<List<String>, List<String>> d = AppUtils.getParameterList(infileS);
         List<String> pLineList = d.getFirstElement();
         genotypeDir = pLineList.get(0);
@@ -454,7 +455,7 @@ public class SampleValidation {
         if (!posdir.exists() || !posAlleledir.exists()) {
             posdir.mkdir();
             posAlleledir.mkdir();
-            this.poswithAllele();
+            this.posWithAllele();
         }
 
         File output = new File(new File(outputDir).getAbsolutePath());
@@ -486,7 +487,7 @@ public class SampleValidation {
         }
     }
 
-    public void poswithAllele() {
+    public void posWithAllele() {
         long startTime = System.currentTimeMillis();
         System.out.println("This is writing pos file ****************************************************");
         HashSet<String> nameSet = new HashSet<>();
@@ -540,12 +541,12 @@ public class SampleValidation {
                         "@Email:\tflu@genetics.ac.cn; dr.lufei@gmail.com\n" +
                         "@Homepage:\thttps://plantgeneticslab.weebly.com/\n" +
                         "\n" +
-                        "#HapScanner is used to perform genotyping of diploid species from whole genome sequenceing data, based on an existing genetic variation library.\n" +
+                        "#HapScanner is used to perform genotyping of diploid species from whole genome sequencing data, based on an existing genetic variation library.\n" +
                         "#To run and pipeline, the machine should have both Java 8 and samtools installed. The lib directory should stay with TIGER.jar in the same folder.\n" +
                         "#Command line example. java -Xmx100g -jar TIGER.jar -a HapScanner -p parameter_hapscanner.txt > log.txt &\n" +
                         "#To specify options, please edit the the parameters below. Also, please keep the order of parameters.\n" +
                         "\n" +
-                        "#Parameter 1: The taxaRefBam file containing information of taxon and its corresponding refernece genome and bam files. The bam file should have .bai file in the same folder\n" +
+                        "#Parameter 1: The taxaRefBam file containing information of taxon and its corresponding reference genome and bam files. The bam file should have .bai file in the same folder\n" +
                         "#If one taxon has n bam files, please list them in n rows.\n");
                 bw.write(new File(taxaRefBAMDir, plate + "_taxaRefBAM_chr" + chr + ".txt").getAbsolutePath() + "\n" +
                         "\n");
@@ -616,7 +617,7 @@ public class SampleValidation {
         System.out.println("******* Writing taxaRefBam files takes " + (endTime - startTime) + "ms");
     }
 
-    private void Hapscanner() {
+    private void HapScanner() {
         for (int i = 0; i < chrNumber; i++) {
             int chr = i + 1;
             String infileS = new File(parameterDir, plate + "_parameter_chr" + chr + ".txt").getAbsolutePath();
@@ -625,7 +626,7 @@ public class SampleValidation {
     }
 
     public void getFixedIBS(){
-        this.getheter();
+        this.getHeter();
         String input1 = new File(outputDir,"Heter/heterozygosity.txt").getAbsolutePath();
         String input2 = new File(QCdir,"Quality_"+method+"_R1.txt").getAbsolutePath();
         String output = new File(outputDir,"Summary/check.txt").getAbsolutePath();

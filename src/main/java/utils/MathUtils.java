@@ -38,7 +38,7 @@ public class MathUtils {
      * get standard variation or sd from an array
      * @return
      */
-    public static double getsd(double[] array) {
+    public static double getSd(double[] array) {
         double sd = 0;
         double average = getMean(array);
         for (int i = 0; i < array.length; i++) {
@@ -54,7 +54,7 @@ public class MathUtils {
      * get variance from an array
      * @return
      */
-    public static double getvar(double[] array) {
+    public static double getVar(double[] array) {
         double var = 0;
         double average = getMean(array);
         for (int i = 0; i < array.length; i++) {
@@ -70,7 +70,7 @@ public class MathUtils {
      * @return
      */
     public static double[] getZscore(double[] array) {
-        double sd = getsd(array);
+        double sd = getSd(array);
         double average = getMean(array);
         double[] zscore = new double[array.length];
         for (int i = 0; i < array.length; i++) {
@@ -111,7 +111,7 @@ public class MathUtils {
      * get range from an array
      * @return
      */
-    public static double getrange(double[] array){
+    public static double getRange(double[] array){
         double range = 0;
         Arrays.sort(array);
         range = array[array.length-1]-array[0];
@@ -122,7 +122,7 @@ public class MathUtils {
      * @param array
      * @return
      */
-    public static double getmax(double[] array){
+    public static double getMax(double[] array){
         double max = 0;
         Arrays.sort(array);
         max = array[array.length-1]-array[0];
@@ -133,14 +133,14 @@ public class MathUtils {
      * @param array
      * @return
      */
-    public static double getmin(double[] array){
+    public static double getMin(double[] array){
         double min = 0;
         Arrays.sort(array);
         min = array[0];
         return min;
     }
 
-    public static double getmode(double[] array){
+    public static double getMode(double[] array){
         double mode = 0;
         Arrays.sort(array);
         HashMap<Double,Integer> num = new HashMap<>();
