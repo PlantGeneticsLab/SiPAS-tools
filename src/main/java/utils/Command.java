@@ -1,7 +1,10 @@
 package utils;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 /**
  * command line for threadpool
@@ -19,12 +22,12 @@ public class Command implements Callable<Command> {
     }
 
     @Override
-    public Command call() throws Exception {
+    public Command call() {
         try {
             System.out.println(command);
             String[] cmdarry1 = {"/bin/bash", "-c", command};
-            Process p1 = Runtime.getRuntime().exec(cmdarry1, null, dir);
-            p1.waitFor();
+            Process p = Runtime.getRuntime().exec(cmdarry1, null,dir);
+            p.waitFor();
         } catch (Exception e) {
             e.printStackTrace();
         }

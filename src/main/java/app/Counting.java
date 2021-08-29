@@ -68,6 +68,25 @@ public class Counting {
             ex.getStackTrace();
         }
     }
+    public static String monitor (String arg){
+        String currentThreads =null;
+        String command = "ps aux | grep "+arg+" | wc -l ";
+        String [] cmdarry ={"/bin/bash","-c",command};
+        try{
+            Process p =Runtime.getRuntime().exec(cmdarry,null);
+            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String temp = null;
+            while ((temp = br.readLine()) != null) {
+//                currentThreads=Integer.parseInt(temp);
+                currentThreads=temp;
+            }
+            p.waitFor();br.close();
+        }
+        catch (Exception ex){
+            ex.getStackTrace();
+        }
+        return currentThreads;
+    }
     public void runHTSeqCount(List<File> fList){
         fList.parallelStream().forEach(f -> {
             StringBuilder sb = new StringBuilder();
@@ -86,7 +105,7 @@ public class Counting {
                 File dir = new File(new File (this.inputFileDirS,subDirS[0]).getAbsolutePath());
                 String[] cmdarry ={"/bin/bash","-c",command};
                 Process p=Runtime.getRuntime().exec(cmdarry,null,dir);
-                p.waitFor(2,TimeUnit.MINUTES);
+                p.waitFor(0,TimeUnit.MINUTES);
             }
             catch (Exception e) {
                 e.printStackTrace();
