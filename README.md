@@ -1,7 +1,7 @@
 # SiPAS-tools
 Bioinformatic toolkits of RNA-seq data.
 
-##Overview
+## Overview
 SiPAS-tools integrates a collection of toolkits facilitating research analysis on RNA-seq data. It is a Java based program, combining efficiency and flexibility to realize high-performance computation of various of functions for the next transcriptomics analysis.
 ##Apps And User Manual
 SiPAS-tools is designed to simpliy its usage for the convenience of end users. It has a list of applications (Apps). Each app has a parameter file or some parameters. There are the apps of SiPAS-tools:
@@ -31,7 +31,7 @@ Gene qualitificaiton of samples
 Geting count table of samples
 ```
 
-##Citations
+## Citations
 
 
 
