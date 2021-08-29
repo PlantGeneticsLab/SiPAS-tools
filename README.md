@@ -29,7 +29,7 @@ Gene qualitificaiton of samples
 ```sh
 Geting count table of samples
 ```
-###Citations
+##Citations
 
 
 
