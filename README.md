@@ -16,19 +16,19 @@ Caculating the quality score of samples.
 ```
 [SampleValidation](https://github.com/PlantGeneticsLab/SiPAS-tools/wiki/SampleValidation)
 ```sh
-Validating the RNA samples using genotype data
+Validating the RNA samples using genotype data.
 ```
 [Alignment](https://github.com/PlantGeneticsLab/SiPAS-tools/wiki/Alignment)
 ```sh
-Geting bam file using STAR
+Geting bam file using STAR.
 ```
 [Counting](https://github.com/PlantGeneticsLab/SiPAS-tools/wiki/Counting)
 ```sh
-Gene qualitificaiton of samples
+Gene qualitificaiton of samples.
 ```
 [Merging](https://github.com/PlantGeneticsLab/SiPAS-tools/wiki/Merging)
 ```sh
-Geting count table of samples
+Geting count table of samples.
 ```
 
 ## Citations
