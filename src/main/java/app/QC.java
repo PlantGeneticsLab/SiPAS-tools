@@ -26,32 +26,32 @@ public class QC {
 
     public QC(String[] args) {
         long startTimePoint = System.nanoTime();
-        this.subSample(args);
+//        this.subSample(args);
         this.getQuality(args);
         long endTimePoint = System.nanoTime();
         System.out.println("Times:" + (endTimePoint - startTimePoint));
     }
 
-    public void subSample(String[] args){
+    public void subSample(String[] args) {
         this.inputDir = new File(args[0]).getAbsolutePath();
         this.outputDir = new File(args[1]).getAbsolutePath();
         this.method = args[2];
         this.readsNumber = args[3];
         File[] fs = new File(inputDir).listFiles();
-        fs = IOUtils.listFilesEndsWith(fs,".fq");
+        fs = IOUtils.listFilesEndsWith(fs, ".fq");
         try {
             ExecutorService pool = Executors.newFixedThreadPool(12);
             File dir = new File(new File(inputDir).getAbsolutePath());
             for (int i = 0; i < fs.length; i++) {
                 StringBuilder sb = new StringBuilder();
-                sb.append("seqtk sample -s100 " + new File(inputDir, fs[i].getName()).getAbsolutePath() + " " + readsNumber + " | gzip > " + new File(outputDir, fs[i].getName().replace("fq","fq.gz")).getAbsolutePath());
+                sb.append("seqtk sample -s100 " + new File(inputDir, fs[i].getName()).getAbsolutePath() + " " + readsNumber + " | gzip > " + new File(outputDir, fs[i].getName().replace("fq", "fq.gz")).getAbsolutePath());
                 String command = sb.toString();
                 Command com = new Command(command, dir);
                 Future<Command> chrom = pool.submit(com);
             }
             pool.shutdown();
             pool.awaitTermination(Long.MAX_VALUE, TimeUnit.MICROSECONDS);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -69,6 +69,7 @@ public class QC {
         }
         String[] names = nameSet.toArray(new String[0]);
         Arrays.sort(names);
+        System.out.println("Total " + names.length + " samples...");
         HashMap<String, Integer> nameMap = new HashMap<>();
         for (int i = 0; i < names.length; i++) {
             nameMap.put(names[i], i);
@@ -87,19 +88,21 @@ public class QC {
             String seq2 = null;
             String des2 = null;
             String quality2 = null;
-            int countline = 0;
+//            int countline = 0;
+            int[] countline = new int[150];
             double[] Q1 = new double[150];
             double[] Q2 = new double[150];
             try {
                 for (int i = 0; i < 150; i++) {
                     Q1[i] = 0;
                     Q2[i] = 0;
+                    countline[i] = 0;
                 }
                 while ((read1 = br1.readLine()) != null) {
-                    countline++;
-                    if(countline > Integer.parseInt(readsNumber))break;
-                    if (countline % 5000 == 0) {
-                        System.out.println(countline);
+//                    countline++;
+                    if (countline[0] >= Integer.parseInt(readsNumber)) break;
+                    if (countline[0] % 5000 == 0) {
+//                        System.out.println(countline[0]);
                     }
                     seq1 = br1.readLine();
                     des1 = br1.readLine();
@@ -108,9 +111,10 @@ public class QC {
                     seq2 = br2.readLine();
                     des2 = br2.readLine();
                     quality2 = br2.readLine();
+                    if (quality1.length() != quality2.length())continue;
                     for (int i = 0; i < quality1.length(); i++) {
-//                        System.out.println(quality1.substring(i,i+1));
-//                        System.out.println(FastqFeature.getscore(quality1.substring(i, i + 1)));
+                        System.out.println(quality1.length());
+                        countline[i]++;
                         Q1[i] += (double) FastqFeature.getscore(quality1.substring(i, i + 1));
                         Q2[i] += (double) FastqFeature.getscore(quality2.substring(i, i + 1));
                     }
@@ -118,24 +122,24 @@ public class QC {
                 br1.close();
                 br2.close();
                 for (int i = 0; i < 150; i++) {
-                    Q_R1[nameMap.get(f)][i] = (double) Q1[i] / countline;
-                    Q_R2[nameMap.get(f)][i] = (double) Q2[i] / countline;
+                    Q_R1[nameMap.get(f)][i] = (double) Q1[i] / countline[i];
+                    Q_R2[nameMap.get(f)][i] = (double) Q2[i] / countline[i];
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
-        BufferedWriter bw1 = IOUtils.getTextWriter(new File(outputDir, "Quality_"+method+"_R1.txt").getAbsolutePath());
-        BufferedWriter bw2 = IOUtils.getTextWriter(new File(outputDir, "Quality_"+method+"_R2.txt").getAbsolutePath());
+        BufferedWriter bw1 = IOUtils.getTextWriter(new File(outputDir, "Quality_" + method + "_R1.txt").getAbsolutePath());
+        BufferedWriter bw2 = IOUtils.getTextWriter(new File(outputDir, "Quality_" + method + "_R2.txt").getAbsolutePath());
         try {
             DecimalFormat defor = new DecimalFormat("0.000");
             double value1 = 0;
             double value2 = 0;
             for (int i = 0; i < names.length; i++) {
-                if(method.equals("mean")) {
+                if (method.equals("mean")) {
                     value1 = MathUtils.getMean(Q_R1[i]);
                     value2 = MathUtils.getMean(Q_R2[i]);
-                }else if (method.equals("median")) {
+                } else if (method.equals("median")) {
                     value1 = MathUtils.getMedian(Q_R1[i]);
                     value2 = MathUtils.getMedian(Q_R2[i]);
                 }
