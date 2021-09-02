@@ -15,8 +15,8 @@ import java.util.HashMap;
  */
 public class FastqFeature {
 
-    private static String[] phreds = {"!", "\"", "#", "$", "%", "&", " ", "(", ")", "*", "+", ",", "-", ".", "/", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ":", ";", "<", "=", ">", "?", "@", "A", "B", "C", "D", "E", "F", "G", "H", "I"};
-    private static int[] score = new int[41];
+    private static String[] phreds = {"!", "\"", "#", "$", "%", "&", " ", "(", ")", "*", "+", ",", "-", ".", "/", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ":", ";", "<", "=", ">", "?", "@", "A", "B", "C", "D", "E", "F", "G", "H", "I","J","K"};
+    private static int[] score = new int[43];
     private static HashMap<Integer, String> scoreQMap = null;
     private static HashMap<String, Integer> phredQMap = null;
     private static boolean build = buildMaps();
@@ -24,13 +24,13 @@ public class FastqFeature {
     private static boolean buildMaps() {
         scoreQMap = new HashMap<>();
         phredQMap = new HashMap<>();
-        for (int i = 0; i < 41; i++) {
+        for (int i = 0; i < score.length; i++) {
             score[i] = i;
         }
-        for (int i = 0; i < 41; i++) {
+        for (int i = 0; i < score.length; i++) {
             scoreQMap.put(score[i], phreds[i]);
         }
-        for (int i = 0; i < 41; i++) {
+        for (int i = 0; i < score.length; i++) {
             phredQMap.put(phreds[i], score[i]);
         }
         return true;
