@@ -119,7 +119,28 @@ public class VCFutils {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    public static void getHeterozygosityGZ(String VCF, String output) {
+        String input = new File(VCF).getAbsolutePath();
+        GenotypeGrid g = new GenotypeGrid(input, GenoIOFormat.VCF_GZ);
+        BufferedWriter bw = IOUtils.getTextWriter(output);
+        String[] names = g.getTaxaNames();
+        int homosite = 0;
+        int hetersite = 0;
+        double heterozygosity = 0;
+        try {
+            for (int i = 0; i < names.length; i++) {
+                hetersite = g.getHeterozygoteNumberByTaxon(i);
+                homosite = g.getHomozygoteNumberByTaxon(i);
+                heterozygosity = (double) hetersite / (hetersite + homosite);
+                bw.write(names[i] + "\t" + hetersite + "\t" + homosite + "\t" + heterozygosity + "\n");
+            }
+            bw.flush();
+            bw.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void getIBS(String VCF1, String VCF2, String outputfile) {

@@ -51,6 +51,7 @@ public class SampleValidation {
         this.getDNA();
         this.getMerge();
         this.getIBS();
+        this.getHeterozygosity();
         this.filtersample();
         this.getDensityHeatmap();
     }
@@ -272,6 +273,13 @@ public class SampleValidation {
         return heterMap;
     }
 
+    private void getHeterozygosity(){
+        File out = new File(new File(outputDir,"heterRNA").getAbsolutePath());
+        out.mkdir();
+        String input = new File(outputDir,"RNA/RNAall.vcf.gz").getAbsolutePath();
+        String output = new File(out,"heterRNA.txt").getAbsolutePath();
+        VCFutils.getHeterozygosityGZ(new File(input).getAbsolutePath(), new File(output).getAbsolutePath());
+    }
 
     private void getMerge() {
         String infileDirRNA = new File(outputDir, "RNA").getAbsolutePath();
