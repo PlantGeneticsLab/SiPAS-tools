@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.stream.Stream;
 
+
 public class countDown {
     public void whenParallelProcessing_thenMainThreadWillBlockUntilCompletion()
             throws InterruptedException {
@@ -22,7 +23,5 @@ public class countDown {
 //        workers.forEach(Thread::start);
         countDownLatch.await();
         outputScraper.add("Latch released");
-
     }
-
 }
