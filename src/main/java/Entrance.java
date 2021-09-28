@@ -30,7 +30,6 @@ public class Entrance implements CLIInterface {
     String introduction = this.createIntroduction();
     String app = null;
     String parameterPath = null;
-//    String parameterPath = "/Users/yxh/Documents/003eQTL/test/test.txt";
     String parameters = null;
 
     String inputFile = null;
@@ -45,7 +44,6 @@ public class Entrance implements CLIInterface {
     public Entrance (String[] args) {
         this.createOptions();
         this.retrieveParameters (args);
-//        new SampleValidation(parameterPath);
     }
 
     @Override
