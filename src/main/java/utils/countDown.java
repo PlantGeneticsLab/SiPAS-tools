@@ -14,12 +14,12 @@ public class countDown {
 
         List<String> outputScraper = Collections.synchronizedList(new ArrayList<>());
         CountDownLatch countDownLatch = new CountDownLatch(5);
-        List<Thread> workers = Stream
-                .generate(() -> new Thread(new Worker(outputScraper, countDownLatch)))
-                .limit(5)
-                .collect(toList());
-
-        workers.forEach(Thread::start);
+//        List<Thread> workers = Stream
+//                .generate(() -> new Thread(new Worker(outputScraper, countDownLatch)))
+//                .limit(5)
+//                .collect(toList());
+//
+//        workers.forEach(Thread::start);
         countDownLatch.await();
         outputScraper.add("Latch released");
 

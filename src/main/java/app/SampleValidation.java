@@ -44,7 +44,6 @@ public class SampleValidation {
     String QCdir = null;
     String method = null;
 
-
     public SampleValidation(String parameterPath) {
         this.getVCF(parameterPath);
         this.getRNA();
@@ -458,9 +457,9 @@ public class SampleValidation {
         samtoolsPath = pLineList.get(9);
         threads = pLineList.get(10);
         chrNumber = Integer.parseInt(pLineList.get(11));
-        rate = Integer.parseInt(pLineList.get(12));
-        QCdir = pLineList.get(13);
-        method = pLineList.get(14);
+        rate = Double.parseDouble(pLineList.get(12));
+//        QCdir = pLineList.get(13);
+//        method = pLineList.get(14);
 
         File posdir = new File(new File(posDir).getAbsolutePath());
         File posAlleledir = new File(new File(posAlleleDir).getAbsolutePath());
