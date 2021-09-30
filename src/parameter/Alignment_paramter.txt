@@ -1,0 +1,25 @@
+@App:	Alignment
+@Author: Jun Xu
+@Email: junxu1048@genetics.ac.cn
+#The directory of input.
+/data2/junxu/SiPAS-tools/30_1/
+#Mode of alignment. PE or SE. The default is PE mode
+PE
+#Number of loci of multiple alignment. If the value is 10, it means that a read mapping to more than 10 position will be discarded. The default is 2
+10
+#The rate of mismatch. If this value is greater than set value, this read will be discard. The defult is 0.1
+0.1
+#The minimun number of match
+80
+#The minimun reads number of each library. The default value is 1M reads.
+0
+#The threads used for run this pipeline. The default value is 32.
+32
+#Index position of STAT. If it is empty, it will generate starLib filr in the output directory.
+/data2/junxu/starLib1.1
+#The gene annotation file (GTF format)
+/data1/home/junxu/*.gtf
+#The gene reference file (fa format)
+/data1/home/junxu/*.fa
+#The path of STAR alignment software
+/data1/home/junxu/software/STAR-2.6.1c/bin/Linux_x86_64/STAR

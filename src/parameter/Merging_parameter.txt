@@ -1,0 +1,14 @@
+@App:	Alignment
+@Author: Jun Xu
+@Email: junxu1048@genetics.ac.cn
+#Plate
+./1
+./2
+./3
+./4
+#Exclute Samples
+./E245
+./E089
+./E111
+#OutputDirS
+./countTable/

@@ -95,7 +95,7 @@ public class Alignment {
             BufferedReader br = IOUtils.getTextReader(parameterFileS);
             String temp = null;
             while ((temp = br.readLine()) != null) {
-                if (temp.startsWith("#")) continue;
+                if (temp.startsWith("#") || temp.startsWith("@")  ) continue;
                 if (temp.isEmpty()) continue;
                 pLineList.add(temp);
             }

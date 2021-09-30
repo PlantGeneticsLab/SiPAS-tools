@@ -9,6 +9,7 @@ package utils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.concurrent.CountDownLatch;
 
 public class MonitorUtils {
     /**
@@ -48,7 +49,6 @@ public class MonitorUtils {
             BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
             String temp = null;
             while ((temp = br.readLine()) != null) {
-                System.out.println(temp);
                 currentThreads=(Integer.parseInt(temp.replaceAll(" ",""))-1)/2;
             }
             p.waitFor();
@@ -57,5 +57,51 @@ public class MonitorUtils {
             ex.getStackTrace();
         }
         return currentThreads;
+    }
+    /**
+     * @param task sample
+     * get the current process ID of a task
+     * @return
+     */
+    public static int getProcessID (String task, String sample){
+        int currentProcessID =0;
+        String command = "ps aux | grep "+task+" | grep "+sample+" | awk '{print $2}' ";
+        try{
+            String [] cmdarry ={"/bin/bash","-c",command};
+            Process p =Runtime.getRuntime().exec(cmdarry,null);
+            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String temp = null;
+            while ((temp = br.readLine()) != null) {
+                currentProcessID=(Integer.parseInt(temp.replaceAll(" ","")));
+            }
+            p.waitFor();br.close();
+        }
+        catch (Exception ex){
+            ex.getStackTrace();
+        }
+        return currentProcessID;
+    }
+    /**
+     * @param processID
+     * get the current process ID of a task
+     * @return
+     */
+    public static int isFinish (int processID){
+        int isFinish = 0;
+        try{
+            String command = "ps aux | grep "+processID+" | grep R | wc -l ";
+            String [] cmdarry ={"/bin/bash/","-c",command};
+            Process p =Runtime.getRuntime().exec(cmdarry,null);
+            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String temp = null;
+            while ((temp = br.readLine()) != null) {
+                isFinish=Integer.parseInt(temp.replace(" ",""));
+            }
+            p.waitFor();
+        }
+        catch (Exception ex){
+            ex.getStackTrace();
+        }
+        return isFinish;
     }
 }

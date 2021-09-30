@@ -30,9 +30,8 @@ public class Entrance implements CLIInterface {
     String introduction = this.createIntroduction();
     String app = null;
     String parameterPath = null;
-    String parameters = null;
 
-    String inputFile = null;
+    String inputFileDirS = null;
     String outputFileDirS=null;
     String sampleInformationFileS = null;
     String library = null;
@@ -70,7 +69,7 @@ public class Entrance implements CLIInterface {
             parameterPath = line.getOptionValue("f");
 
             if( line.hasOption( "i" ) ) {
-                inputFile =line.getOptionValue("i");
+                inputFileDirS =line.getOptionValue("i");
             }
             if( line.hasOption( "o" ) ) {
                 outputFileDirS=line.getOptionValue("o");
@@ -104,11 +103,11 @@ public class Entrance implements CLIInterface {
             System.exit(0);
         }
         if (app.equals(AppNames.Parsing.getName())) {
-            String[] news = {this.inputFile, this.outputFileDirS, this.sampleInformationFileS, this.library};
+            String[] news = {this.inputFileDirS, this.outputFileDirS, this.sampleInformationFileS, this.library};
             new Parsing(news);
         }
         else if (app.equals(AppNames.QC.getName())) {
-            String[] news ={this.inputFile,this.outputFileDirS,this.QCmethod,this.readsNumber};
+            String[] news ={this.inputFileDirS,this.outputFileDirS,this.QCmethod,this.readsNumber};
             new QC(news);
         }
         else if (app.equals(AppNames.Alignment.getName())) {
@@ -120,24 +119,19 @@ public class Entrance implements CLIInterface {
 //            new SampleValidation(news);
         }
         else if (app.equals(AppNames.Counting.getName())) {
-            String[] news = {this.inputFile, this.GTFDir,String.valueOf(this.threads)};
+            String[] news = {this.inputFileDirS, this.GTFDir,String.valueOf(this.threads)};
             new Counting(news);
         }
         else if (app.equals(AppNames.Merging.getName())) {
-            new Alignment(this.parameterPath);
+            String [] news ={this.inputFileDirS,this.outputFileDirS};
+            new Merging(news);
         }
         else {
             System.out.println("App does not exist");
             this.printIntroductionAndUsage();
             System.exit(0);
         }
-        if (this.parameterPath == null) {
-            System.out.println("Parametar file does not exist");
-            this.printIntroductionAndUsage();
-            System.exit(0);
-        }
-        File f = new File (this.parameterPath);
-        if ((app=="Alignment" && !f.exists()) || (app=="SampleValidation" && !f.exists())) {
+        if ((app=="Alignment" && this.parameterPath == null) || (app=="SampleValidation" && this.parameterPath == null)) {
             System.out.println("Parametar file does not exist");
             this.printIntroductionAndUsage();
             System.exit(0);
