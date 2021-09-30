@@ -1,6 +1,9 @@
+<img src="https://www.dropbox.com/s/k9wxvebpe5jggp1/Slide1.png?raw=1" height=300 align="center"> 
+
 # SiPAS-tools
 Bioinformatic toolkits of RNA-seq data.
-##Overview
+
+## Overview
 SiPAS-tools integrates a collection of toolkits facilitating research analysis on RNA-seq data. It is a Java based program, combining efficiency and flexibility to realize high-performance computation of various of functions for the next transcriptomics analysis.
 ##Apps And User Manual
 SiPAS-tools is designed to simpliy its usage for the convenience of end users. It has a list of applications (Apps). Each app has a parameter file or some parameters. There are the apps of SiPAS-tools:
@@ -15,21 +18,22 @@ Caculating the quality score of samples.
 ```
 [SampleValidation](https://github.com/PlantGeneticsLab/SiPAS-tools/wiki/SampleValidation)
 ```sh
-Validating the RNA samples using genotype data
+Validating the RNA samples using genotype data.
 ```
 [Alignment](https://github.com/PlantGeneticsLab/SiPAS-tools/wiki/Alignment)
 ```sh
-Geting bam file using STAR
+Geting bam file using STAR.
 ```
 [Counting](https://github.com/PlantGeneticsLab/SiPAS-tools/wiki/Counting)
 ```sh
-Gene qualitificaiton of samples
+Gene qualitificaiton of samples.
 ```
 [Merging](https://github.com/PlantGeneticsLab/SiPAS-tools/wiki/Merging)
 ```sh
-Geting count table of samples
+Geting count table of samples.
 ```
-###Citations
+
+## Citations
 
 
 

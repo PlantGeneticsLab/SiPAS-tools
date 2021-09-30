@@ -3,7 +3,7 @@
 
 #This hapscanner pipeline is used to test the IBS matrix and give the final possible samples
 
-#####File parameter -- genotypeDir,bamDir,outputDir,plate
+#####Fileutils parameter -- genotypeDir,bamDir,outputDir,plate
 #Parameter1:	GenotypeDir
 /data1/home/junxu/genotypeMaf005
 
