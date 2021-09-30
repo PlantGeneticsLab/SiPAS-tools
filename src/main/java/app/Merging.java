@@ -160,7 +160,6 @@ public class Merging {
                     }
                     catch (Exception ex) {
                         ex.printStackTrace();
-                        System.out.println(i+"\t"+rowN+"\t"+geneNumber+"\t"+sampleIndex+"\t"+taxonSample[i].size()+"\t"+path);
                     }
                 }
                 int sum =0;
