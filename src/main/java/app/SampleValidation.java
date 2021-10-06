@@ -52,8 +52,8 @@ public class SampleValidation {
         this.getMerge();
         this.getIBS();
         this.getHeterozygosity();
-        this.filtersample();
         this.getDensityHeatmap();
+        this.filtersample();
     }
 
     public void getVCF(String parameterPath) {
@@ -145,7 +145,7 @@ public class SampleValidation {
         long startTime = System.currentTimeMillis();   //获取开始时间
         System.out.println("start");
         System.out.println("This is filtering samples ******************************************************************");
-        String outfileDir = new File(outputDir, "Isec").getAbsolutePath();
+        String outfileDir = new File(outputDir, "Summary").getAbsolutePath();
         String infile = new File(outfileDir, "IBSdensity.txt").getAbsolutePath();
         String infor = new File(outfileDir, "check.txt").getAbsolutePath();
         HashSet<String> sampleSet = new HashSet<>();
@@ -153,8 +153,8 @@ public class SampleValidation {
         HashSet<String> addingsampleSet = new HashSet<>();
         HashMap<String, String> RNADNAmap = new HashMap<>();
 
-        HashMap<String, String> heterMap = getheter(new File(outputDir, "heterRNA/heterRNA.txt").getAbsolutePath());
-        System.out.println(new File(outputDir, "heterRNA/heterRNA.txt").getAbsolutePath());
+        HashMap<String, String> heterMap = getheter(new File(outputDir, "Heter/heterRNA.txt").getAbsolutePath());
+        System.out.println(new File(outputDir, "Heter/heterRNA.txt").getAbsolutePath());
 
         try {
             String temp = null;
@@ -202,7 +202,7 @@ public class SampleValidation {
 
             for (int i = 0; i < RNASet.size(); i++) {
                 String RNA = RNASet.get(i);
-                if(Double.parseDouble(heterMap.get(RNA)) > 0.08)continue;
+//                if(Double.parseDouble(heterMap.get(RNA)) > 0.08)continue;
                 String DNA = null;
                 if (RNA.contains("JM22")) {
                     DNA = "E025";
@@ -274,8 +274,7 @@ public class SampleValidation {
     }
 
     private void getHeterozygosity(){
-        File out = new File(new File(outputDir,"heterRNA").getAbsolutePath());
-        out.mkdir();
+        File out = new File(new File(outputDir,"Heter").getAbsolutePath());
         String input = new File(outputDir,"RNA/RNAall.vcf.gz").getAbsolutePath();
         String output = new File(out,"heterRNA.txt").getAbsolutePath();
         VCFutils.getHeterozygosityGZ(new File(input).getAbsolutePath(), new File(output).getAbsolutePath());
@@ -476,13 +475,11 @@ public class SampleValidation {
         File RNAdir = new File(new File(outputDir, "RNA").getAbsolutePath());
         File DNAdir = new File(new File(outputDir, "DNA").getAbsolutePath());
         File Heterdir = new File(new File(outputDir, "Heter").getAbsolutePath());
-        File Qualitydir = new File(new File(outputDir, "Quality").getAbsolutePath());
         File Summarydir = new File(new File(outputDir, "Summary").getAbsolutePath());
 
         RNAdir.mkdir();
         DNAdir.mkdir();
         Heterdir.mkdir();
-        Qualitydir.mkdir();
         Summarydir.mkdir();
 
         if (RNAdir.isDirectory()) {
@@ -642,7 +639,7 @@ public class SampleValidation {
         String infileDir = new File(outputDir).getAbsolutePath();
         String infileS1 = new File(infileDir, "RNA/RNAall.vcf.gz").getAbsolutePath();
         String infileS2 = new File(infileDir, "DNA/DNAall.vcf.gz").getAbsolutePath();
-        String ibsOutfileS = new File(infileDir, "Summary/check_unfixed.txt").getAbsolutePath();
+        String ibsOutfileS = new File(infileDir, "Summary/check.txt").getAbsolutePath();
         GenotypeGrid g1 = new GenotypeGrid(infileS1, GenoIOFormat.VCF);
         GenotypeGrid g2 = new GenotypeGrid(infileS2, GenoIOFormat.VCF);
         GenotypeGrid g = GenotypeOperation.mergeGenotypesByTaxon(g1, g2);
