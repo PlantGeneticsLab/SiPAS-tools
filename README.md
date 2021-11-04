@@ -12,10 +12,6 @@ SiPAS-tools is designed to simpliy its usage for the convenience of end users. I
 ```sh
 Parsing samples arrcoding to barcodes.
 ```
-[QC](https://github.com/PlantGeneticsLab/SiPAS-tools/wiki/QC)
-```sh
-Caculating the quality score of samples.
-```
 [SampleValidation](https://github.com/PlantGeneticsLab/SiPAS-tools/wiki/SampleValidation)
 ```sh
 Validating the RNA samples using genotype data.
