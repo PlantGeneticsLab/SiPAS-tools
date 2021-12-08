@@ -80,7 +80,7 @@ public class Alignment {
                 Runtime rt = Runtime.getRuntime();
                 Process p = rt.exec(command);p.waitFor();
                 Process p1 = rt.exec(command1);p1.waitFor();
-                Process p2 = rt.exec(command2);p2.waitFor();
+//                Process p2 = rt.exec(command2);p2.waitFor();
                 Process p3 = rt.exec(command3);p3.waitFor();
             }
             catch (Exception e) {
