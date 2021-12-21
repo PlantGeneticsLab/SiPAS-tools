@@ -40,7 +40,7 @@ public class SampleValidation {
 
     String genotypeDir = null;
     String BamDir = null;
-    String genotypesuffix = ".360.vcf.gz";
+    String genotypesuffix = ".vcf.gz";
 
     String QCdir = null;
     String method = null;
