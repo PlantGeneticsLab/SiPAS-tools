@@ -21,7 +21,6 @@ import java.io.File;
 import java.util.*;
 
 
-
 public class SampleValidation {
 
     int chrNumber = 0;
@@ -64,7 +63,7 @@ public class SampleValidation {
 
     }
 
-    private void getDensityHeatmap(){
+    private void getDensityHeatmap() {
         System.out.println("This is writing file of RNA and DNA IBS plot ***********************************************");
         String infileDir = new File(outputDir, "Summary").getAbsolutePath();
         String infile = new File(infileDir, "check.txt").getAbsolutePath();
@@ -111,7 +110,7 @@ public class SampleValidation {
 //                    DNA = RNA.substring(3, 7);
                     DNA = RNA.split("_")[4];
                 }
-                if(DNA.equals("NULL"))continue;
+                if (DNA.equals("NULL")) continue;
                 int RNAindex = nameIndexMap.get(RNA);
                 int DNAindex = nameIndexMap.get(DNA) - 1;
                 bw.write(RNA + "\t" + DNA + "\t");
@@ -210,7 +209,7 @@ public class SampleValidation {
                     DNA = "E360";
                 } else {
 //                    DNA = RNA.substring(3, 7);
-                    DNA = RNA.split("_")[4].substring(0,4);
+                    DNA = RNA.split("_")[4].substring(0, 4);
                 }
                 if (DNA.equals("NULL")) continue;
 
@@ -227,17 +226,19 @@ public class SampleValidation {
                 // 最小的IBS
                 double IBSDNAvalue = Min[0];
 
-                bw.write(RNA + "\t" + DNA + "\t" + IBSvalue + "\t" + DNATrue + "\t" + IBSDNAvalue + "\t" + heterMap.get(RNA)+"\t");
+                if (Double.parseDouble(heterMap.get(RNA)) <= 0.08) {
+                    bw.write(RNA + "\t" + DNA + "\t" + IBSvalue + "\t" + DNATrue + "\t" + IBSDNAvalue + "\t" + heterMap.get(RNA) + "\t");
 
-                if (DNA.equals(DNATrue)) {
-                    bw.write("TRUE" + "\n");
-                    bw1.write(RNA + "\t" + DNA + "\t" + heterMap.get(RNA) +"\n");
-                } else {
-                    bw.write("False" + "\n");
-                    if (Math.abs(IBSDNAvalue - IBSvalue) < 0.1) {
-                        bw2.write(RNA + "\t" + DNA + "\t" + heterMap.get(RNA) + "\n");
-                    } else if (IBSDNAvalue < 0.1) {
-                        bw3.write(RNA + "\t" + DNATrue + "\t" + heterMap.get(RNA) +"\n");
+                    if (DNA.equals(DNATrue)) {
+                        bw.write("TRUE" + "\n");
+                        bw1.write(RNA + "\t" + DNA + "\t" + heterMap.get(RNA) + "\n");
+                    } else {
+                        bw.write("False" + "\n");
+                        if (Math.abs(IBSDNAvalue - IBSvalue) < 0.1) {
+                            bw2.write(RNA + "\t" + DNA + "\t" + heterMap.get(RNA) + "\n");
+                        } else if (IBSDNAvalue < 0.1) {
+                            bw3.write(RNA + "\t" + DNATrue + "\t" + heterMap.get(RNA) + "\n");
+                        }
                     }
                 }
             }
@@ -273,10 +274,10 @@ public class SampleValidation {
         return heterMap;
     }
 
-    private void getHeterozygosity(){
-        File out = new File(new File(outputDir,"Heter").getAbsolutePath());
-        String input = new File(outputDir,"RNA/RNAall.vcf.gz").getAbsolutePath();
-        String output = new File(out,"heterRNA.txt").getAbsolutePath();
+    private void getHeterozygosity() {
+        File out = new File(new File(outputDir, "Heter").getAbsolutePath());
+        String input = new File(outputDir, "RNA/RNAall.vcf.gz").getAbsolutePath();
+        String output = new File(out, "heterRNA.txt").getAbsolutePath();
         VCFutils.getHeterozygosityGZ(new File(input).getAbsolutePath(), new File(output).getAbsolutePath());
     }
 
