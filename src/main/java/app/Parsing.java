@@ -32,6 +32,7 @@ public class Parsing {
     ArrayList barcodeLengths = null;
 
     String outputDirs=null;
+    public StringBuilder log = new StringBuilder();
 
     String[] subDirS = {"subFastqs", "sams", "geneCount", "countTable"};
 
@@ -39,12 +40,14 @@ public class Parsing {
         long start = System.currentTimeMillis();
         this.parseParameters(arg);
         this.processTaxaAndBarcode();
-        this.PEParse();
+        log.append(this.PEParse());
         long end = System.currentTimeMillis();
         System.out.println("Times:"+(end-start)/1000F);
+        log.append("\nTimes:"+(end-start)/1000F);
     }
 
-    private void PEParse () {
+    private String PEParse () {
+        StringBuilder sb = new StringBuilder();
         String subFqDirS = new File(this.outputDirs,subDirS[0]).getAbsolutePath();
         String[] subFqFileS1 = new String[barcodeLists.size()];
         String[] subFqFileS2 = new String[barcodeLists.size()];
@@ -104,7 +107,7 @@ public class Parsing {
                     br1.readLine();br1.readLine();
                 }
             }
-            StringBuilder sb = new StringBuilder();
+
             sb.append(cnt).append(" out of ").append(cnt2).append(", ").append(((float)(double)cnt/cnt2)).append(" of total reads were parsed from " + this.library).append(" ").append(f2);
             System.out.println(sb.toString());
             for (int i =0;i<subFqFileS1.length;i++){
@@ -117,6 +120,7 @@ public class Parsing {
             e.printStackTrace();
             System.exit(1);
         }
+        return sb.toString();
     }
     private void parseParameters (String[] arg) {
         this.inputFile =arg[0];

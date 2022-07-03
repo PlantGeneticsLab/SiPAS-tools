@@ -1,10 +1,10 @@
 package app;
 
-import org.checkerframework.checker.units.qual.A;
+//import org.checkerframework.checker.units.qual.A;
 import pgl.infra.utils.IOUtils;
 import pgl.infra.utils.PStringUtils;
 
-import javax.swing.table.TableStringConverter;
+//import javax.swing.table.TableStringConverter;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -20,29 +20,33 @@ public class Merging {
     HashSet sampleInfor []=null;
     List sampleList = null;
     HashMap<String,List<File>> hm = new HashMap();
+    List<String> fileList = new ArrayList();
+
 
 
     public Merging(String[] parameters) {
         this.countResult(parameters);
+        this.merge();
     }
     public void countResult(String [] parameters) {
-        this.inputDirS=parameters[0];
-        this.outputDirS=parameters[1];
-        List<String> fileList = new ArrayList();
+        this.inputDirS = parameters[0];
+        this.outputDirS = parameters[1];
         try {
-            String command = "find "+this.inputDirS+"/*_[0-9] -name correction.txt";
-            String[] cmdarry ={"/bin/bash","-c",command};
-            Process p =Runtime.getRuntime().exec(cmdarry,null);
+            String command = "find " + this.inputDirS + "/*_[0-9] -name correction.txt";
+            String[] cmdarry = {"/bin/bash", "-c", command};
+            Process p = Runtime.getRuntime().exec(cmdarry, null);
             BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
             String temp = null;
             while ((temp = br.readLine()) != null) {
                 fileList.add(temp);
             }
             p.waitFor();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void merge(){
         String temp =null; String [] tem =null;tissueList= new ArrayList<>();
         for (int i=0;i<fileList.size();i++){
             try{

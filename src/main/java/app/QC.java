@@ -20,7 +20,6 @@ import java.util.concurrent.TimeUnit;
 /**
  * Quality Control
  * @author yxh
- * @deprecated
  */
 
 
@@ -45,13 +44,13 @@ public class QC {
         this.method = args[2];
         this.readsNumber = args[3];
         File[] fs = new File(inputDir).listFiles();
-        fs = IOUtils.listFilesEndsWith(fs, ".fq");
+        fs = IOUtils.listFilesEndsWith(fs, ".fq.gz");
         try {
             ExecutorService pool = Executors.newFixedThreadPool(12);
             File dir = new File(new File(inputDir).getAbsolutePath());
             for (int i = 0; i < fs.length; i++) {
                 StringBuilder sb = new StringBuilder();
-                sb.append("seqtk sample -s100 " + new File(inputDir, fs[i].getName()).getAbsolutePath() + " " + readsNumber + " | gzip > " + new File(outputDir, fs[i].getName().replace("fq", "fq.gz")).getAbsolutePath());
+                sb.append("seqtk sample -s100 " + new File(inputDir, fs[i].getName()).getAbsolutePath() + " " + readsNumber + " | gzip > " + new File(outputDir, fs[i].getName()).getAbsolutePath());
                 String command = sb.toString();
                 Command com = new Command(command, dir);
                 Future<Command> chrom = pool.submit(com);

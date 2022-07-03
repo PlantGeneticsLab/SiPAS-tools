@@ -23,7 +23,8 @@ import java.util.*;
 
 public class SampleValidation {
 
-    int chrNumber = 0;
+    int chrStart = 1;
+    int chrEnd = 1;
     double rate = 0;
     String plate = null;
 
@@ -39,7 +40,7 @@ public class SampleValidation {
 
     String genotypeDir = null;
     String BamDir = null;
-    String genotypesuffix = ".vcf.gz";
+    String genotypesuffix = "_VMap3.1_E_360_maf005_mis02.vcf.gz";
 
     String QCdir = null;
     String method = null;
@@ -52,6 +53,7 @@ public class SampleValidation {
         this.getIBS();
         this.getHeterozygosity();
         this.getDensityHeatmap();
+        this.getQC();
         this.filtersample();
     }
 
@@ -60,7 +62,10 @@ public class SampleValidation {
         this.parameter();
         this.taxaRefBAM();
         this.HapScanner();
+    }
 
+    private void getQC(){
+        new QC(new String[]{QCdir,new File(outputDir,"QC").getAbsolutePath(),method,"4000"});
     }
 
     private void getDensityHeatmap() {
@@ -75,7 +80,6 @@ public class SampleValidation {
         BufferedWriter bw1 = IOUtils.getTextWriter(outfile1);
         String temp = null;
         String[] temps = null;
-        int countlines = 0;
         try {
             HashMap<String, Integer> nameIndexMap = new HashMap<>();
             LinkedHashSet<String> samples = new LinkedHashSet<>();
@@ -111,8 +115,13 @@ public class SampleValidation {
                     DNA = RNA.split("_")[4];
                 }
                 if (DNA.equals("NULL")) continue;
+                System.out.println(RNA);
+                System.out.println(DNA);
                 int RNAindex = nameIndexMap.get(RNA);
                 int DNAindex = nameIndexMap.get(DNA) - 1;
+                System.out.println(RNA + " : " + RNAindex);
+                System.out.println(DNA + " : " + DNAindex);
+
                 bw.write(RNA + "\t" + DNA + "\t");
                 bw.write(t.getCell(DNAindex, RNAindex));
                 bw.write("\n");
@@ -288,8 +297,8 @@ public class SampleValidation {
         BufferedWriter bwDNA = IOUtils.getTextWriter(new File(infileDirDNA, "DNAall.vcf").getAbsolutePath());
         String temp = null;
         try {
-            for (int i = 0; i < chrNumber; i++) {
-                int chr = i + 1;
+            for (int i = chrStart; i <= chrEnd; i++) {
+                int chr = i;
                 BufferedReader br = IOUtils.getTextReader(new File(infileDirRNA, "RNA_chr" + PStringUtils.getNDigitNumber(3, chr) + ".vcf").getAbsolutePath());
                 while ((temp = br.readLine()) != null) {
                     if (chr != 1 && temp.startsWith("#")) {
@@ -302,8 +311,8 @@ public class SampleValidation {
             }
             bwRNA.flush();
             bwRNA.close();
-            for (int i = 0; i < chrNumber; i++) {
-                int chr = i + 1;
+            for (int i = chrStart; i < chrEnd; i++) {
+                int chr = i;
                 BufferedReader br = IOUtils.getTextReader(new File(infileDirDNA, "DNA_chr" + PStringUtils.getNDigitNumber(3, chr) + ".vcf").getAbsolutePath());
                 while ((temp = br.readLine()) != null) {
                     if (chr != 1 && temp.startsWith("#")) {
@@ -441,6 +450,8 @@ public class SampleValidation {
 
 
     public void parseParameters(String infileS) {
+        System.out.println("Parsing parameter");
+
         Dyad<List<String>, List<String>> d = AppUtils.getParameterList(infileS);
         List<String> pLineList = d.getFirstElement();
         genotypeDir = pLineList.get(0);
@@ -453,14 +464,20 @@ public class SampleValidation {
         taxaRefBAMDir = pLineList.get(5);
         posDir = pLineList.get(6);
         posAlleleDir = pLineList.get(7);
+
+        System.out.println(posAlleleDir);
         referenceDir = pLineList.get(8);
 
         samtoolsPath = pLineList.get(9);
+        System.out.println(samtoolsPath);
+
         threads = pLineList.get(10);
-        chrNumber = Integer.parseInt(pLineList.get(11));
+//        chrNumber = Integer.parseInt(pLineList.get(11));
+        chrStart = Integer.parseInt(pLineList.get(11).split("-")[0]);
+        chrEnd = Integer.parseInt(pLineList.get(11).split("-")[1]);
         rate = Double.parseDouble(pLineList.get(12));
-//        QCdir = pLineList.get(13);
-//        method = pLineList.get(14);
+        QCdir = pLineList.get(13);
+        method = pLineList.get(14);
 
         File posdir = new File(new File(posDir).getAbsolutePath());
         File posAlleledir = new File(new File(posAlleleDir).getAbsolutePath());
@@ -477,11 +494,13 @@ public class SampleValidation {
         File DNAdir = new File(new File(outputDir, "DNA").getAbsolutePath());
         File Heterdir = new File(new File(outputDir, "Heter").getAbsolutePath());
         File Summarydir = new File(new File(outputDir, "Summary").getAbsolutePath());
+        File QCoutput = new File(new File(outputDir,"QC").getAbsolutePath());
 
         RNAdir.mkdir();
         DNAdir.mkdir();
         Heterdir.mkdir();
         Summarydir.mkdir();
+        QCoutput.mkdir();
 
         if (RNAdir.isDirectory()) {
             System.out.println("Yes");
@@ -543,8 +562,8 @@ public class SampleValidation {
         long startTime = System.currentTimeMillis();
         System.out.println("This is writing parameters files ***********************************************************");
         try {
-            for (int i = 0; i < chrNumber; i++) {
-                int chr = i + 1;
+            for (int i = chrStart; i <= chrEnd; i++) {
+                int chr = i;
                 BufferedWriter bw = IOUtils.getTextWriter(new File(parameterDir, plate + "_parameter_chr" + chr + ".txt").getAbsolutePath());
                 bw.write("@App:\tHapScanner\n" +
                         "@Author:\tFei Lu\n" +
@@ -604,8 +623,8 @@ public class SampleValidation {
         }
         try {
             String[] namelist = nameSet.toArray(new String[nameSet.size()]);
-            for (int i = 0; i < chrNumber; i++) {
-                int chr = i + 1;
+            for (int i = chrStart; i <= chrEnd; i++) {
+                int chr = i;
                 BufferedWriter bw = IOUtils.getTextWriter(new File(taxaRefBAMDir, plate + "_taxaRefBAM_chr" + chr + ".txt").getAbsolutePath());
                 bw.write("Taxa\tReference\tBamPath\n");
                 for (int j = 0; j < namelist.length; j++) {
@@ -628,8 +647,8 @@ public class SampleValidation {
     }
 
     private void HapScanner() {
-        for (int i = 0; i < chrNumber; i++) {
-            int chr = i + 1;
+        for (int i = chrStart; i <= chrEnd; i++) {
+            int chr = i;
             String infileS = new File(parameterDir, plate + "_parameter_chr" + chr + ".txt").getAbsolutePath();
             new HapScanner(infileS);
         }
@@ -640,9 +659,11 @@ public class SampleValidation {
         String infileDir = new File(outputDir).getAbsolutePath();
         String infileS1 = new File(infileDir, "RNA/RNAall.vcf.gz").getAbsolutePath();
         String infileS2 = new File(infileDir, "DNA/DNAall.vcf.gz").getAbsolutePath();
+        System.out.println(infileS1);
+        System.out.println(infileS2);
         String ibsOutfileS = new File(infileDir, "Summary/check.txt").getAbsolutePath();
-        GenotypeGrid g1 = new GenotypeGrid(infileS1, GenoIOFormat.VCF);
-        GenotypeGrid g2 = new GenotypeGrid(infileS2, GenoIOFormat.VCF);
+        GenotypeGrid g1 = new GenotypeGrid(infileS1, GenoIOFormat.VCF_GZ);
+        GenotypeGrid g2 = new GenotypeGrid(infileS2, GenoIOFormat.VCF_GZ);
         GenotypeGrid g = GenotypeOperation.mergeGenotypesByTaxon(g1, g2);
         SumTaxaDivergence std = new SumTaxaDivergence(g);
         std.writeDxyMatrix(ibsOutfileS, IOFileFormat.Text);

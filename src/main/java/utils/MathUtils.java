@@ -1,6 +1,7 @@
 package utils;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
  * @ author: yxh
  * @ created: 2021-07-18 : 8:28 PM
  */
-public class MathUtils {
+public class MathUtils<V>{
 
     /**
      * @param array
@@ -33,6 +34,7 @@ public class MathUtils {
         return average;
     }
 
+
     /**
      * @param array
      * get standard variation or sd from an array
@@ -45,6 +47,17 @@ public class MathUtils {
             sd += (array[i] - average) * (array[i] - average);
         }
         sd = sd / (array.length - 1);
+        sd = Math.sqrt(sd);
+        return sd;
+    }
+
+    public static double getSd(List<Double> array) {
+        double sd = 0;
+        double average = getMean(array);
+        for (int i = 0; i < array.size(); i++) {
+            sd += (array.get(i) - average) * (array.get(i) - average);
+        }
+        sd = sd / (array.size() - 1);
         sd = Math.sqrt(sd);
         return sd;
     }
