@@ -19,6 +19,9 @@
                 <directory>src/main/java</directory>
                 <includes>
                     <include>**/*.R</include>
+                    <include>**/*.gif</include>
+                    <include>**/*.png</include>
+                    <include>**/*</include>
                 </includes>
                 <filtering>true</filtering>
             </resource>
@@ -26,6 +29,9 @@
                 <directory>src/main/resources</directory>
                 <includes>
                     <include>**/*.R</include>
+                    <include>**/*.gif</include>
+                    <include>**/*.png</include>
+                    <include>**/*</include>
                 </includes>
                 <filtering>true</filtering>
             </resource>
@@ -46,11 +52,13 @@
             <artifactId>commons-cli</artifactId>
             <version>1.4</version>
         </dependency>
+
         <dependency>
-            <groupId>gnu-regexp</groupId>
-            <artifactId>gnu-regexp</artifactId>
-            <version>1.1.4</version>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>5.3.21</version>
         </dependency>
+
         <dependency>
             <groupId>net.sf.trove4j</groupId>
             <artifactId>trove4j</artifactId>
@@ -86,6 +94,16 @@
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>1.2.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.shared</groupId>
+            <artifactId>maven-shared-io</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <version>1.7</version>
         </dependency>
     </dependencies>
 

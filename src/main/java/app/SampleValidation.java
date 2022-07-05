@@ -42,30 +42,32 @@ public class SampleValidation {
     String BamDir = null;
     String genotypesuffix = "_VMap3.1_E_360_maf005_mis02.vcf.gz";
 
-    String QCdir = null;
+    String Fastqdir = null;
     String method = null;
 
     public SampleValidation(String parameterPath) {
-        this.getVCF(parameterPath);
+        this.parseParameters(parameterPath);
+        this.getVCF();
         this.getRNA();
         this.getDNA();
         this.getMerge();
         this.getIBS();
         this.getHeterozygosity();
         this.getDensityHeatmap();
-        this.getQC();
-        this.filtersample();
+        if(!Fastqdir.equals(null)) {
+            this.getQC();
+            this.filtersample();
+        }
     }
 
-    public void getVCF(String parameterPath) {
-        this.parseParameters(parameterPath);
+    public void getVCF() {
         this.parameter();
         this.taxaRefBAM();
         this.HapScanner();
     }
 
     private void getQC(){
-        new QC(new String[]{QCdir,new File(outputDir,"QC").getAbsolutePath(),method,"4000"});
+        new QC(new String[]{Fastqdir,new File(outputDir,"QC").getAbsolutePath(),method,"4000"});
     }
 
     private void getDensityHeatmap() {
@@ -476,8 +478,10 @@ public class SampleValidation {
         chrStart = Integer.parseInt(pLineList.get(11).split("-")[0]);
         chrEnd = Integer.parseInt(pLineList.get(11).split("-")[1]);
         rate = Double.parseDouble(pLineList.get(12));
-        QCdir = pLineList.get(13);
-        method = pLineList.get(14);
+        if(pLineList.size() > 14) {
+            Fastqdir = pLineList.get(13);
+            method = pLineList.get(14);
+        }
 
         File posdir = new File(new File(posDir).getAbsolutePath());
         File posAlleledir = new File(new File(posAlleleDir).getAbsolutePath());

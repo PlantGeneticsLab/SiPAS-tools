@@ -32,7 +32,7 @@ public class QC {
 
     public QC(String[] args) {
         long startTimePoint = System.nanoTime();
-//        this.subSample(args);
+        this.subSample(args);
         this.getQuality(args);
         long endTimePoint = System.nanoTime();
         System.out.println("Times:" + (endTimePoint - startTimePoint));
@@ -44,13 +44,13 @@ public class QC {
         this.method = args[2];
         this.readsNumber = args[3];
         File[] fs = new File(inputDir).listFiles();
-        fs = IOUtils.listFilesEndsWith(fs, ".fq.gz");
+        fs = IOUtils.listFilesEndsWith(fs, ".fq");
         try {
             ExecutorService pool = Executors.newFixedThreadPool(12);
             File dir = new File(new File(inputDir).getAbsolutePath());
             for (int i = 0; i < fs.length; i++) {
                 StringBuilder sb = new StringBuilder();
-                sb.append("seqtk sample -s100 " + new File(inputDir, fs[i].getName()).getAbsolutePath() + " " + readsNumber + " | gzip > " + new File(outputDir, fs[i].getName()).getAbsolutePath());
+                sb.append("seqtk sample -s100 " + new File(inputDir, fs[i].getName()).getAbsolutePath() + " " + readsNumber + " > " + new File(outputDir, fs[i].getName()).getAbsolutePath());
                 String command = sb.toString();
                 Command com = new Command(command, dir);
                 Future<Command> chrom = pool.submit(com);
@@ -68,10 +68,10 @@ public class QC {
         this.method = args[2];
         this.readsNumber = args[3];
         File[] fs = new File(inputDir).listFiles();
-        fs = IOUtils.listFilesEndsWith(fs, "R1.fq.gz");
+        fs = IOUtils.listFilesEndsWith(fs, "R1.fq");
         HashSet<String> nameSet = new HashSet<>();
         for (int i = 0; i < fs.length; i++) {
-            nameSet.add(fs[i].getName().replace("_R1.fq.gz", ""));
+            nameSet.add(fs[i].getName().replace("_R1.fq", ""));
         }
         String[] names = nameSet.toArray(new String[0]);
         Arrays.sort(names);
@@ -84,8 +84,8 @@ public class QC {
         double[][] Q_R2 = new double[nameSet.size()][150];
         nameSet.stream().forEach(f -> {
             System.out.println(f);
-            BufferedReader br1 = IOUtils.getTextGzipReader(new File(inputDir, f + "_R1.fq.gz").getAbsolutePath());
-            BufferedReader br2 = IOUtils.getTextGzipReader(new File(inputDir, f + "_R2.fq.gz").getAbsolutePath());
+            BufferedReader br1 = IOUtils.getTextGzipReader(new File(inputDir, f + "_R1.fq").getAbsolutePath());
+            BufferedReader br2 = IOUtils.getTextGzipReader(new File(inputDir, f + "_R2.fq").getAbsolutePath());
             String read1 = null;
             String seq1 = null;
             String des1 = null;
